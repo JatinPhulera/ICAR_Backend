@@ -1,0 +1,6 @@
+@ICAR.Scanner.WebApi_HostAddress = http://localhost:5191
+
+GET {{ICAR.Scanner.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

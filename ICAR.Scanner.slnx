@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ICAR.Scanner.Core/ICAR.Scanner.Core.csproj" />
+  <Project Path="ICAR.Scanner.DataAccess/ICAR.Scanner.DataAccess.csproj" />
+  <Project Path="ICAR.Scanner.Models/ICAR.Scanner.Models.csproj" />
+  <Project Path="ICAR.Scanner.Services/ICAR.Scanner.Services.csproj" />
+  <Project Path="ICAR.Scanner.WebApi/ICAR.Scanner.WebApi.csproj" />
+</Solution>
