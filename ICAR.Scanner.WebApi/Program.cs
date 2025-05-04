@@ -1,12 +1,27 @@
 using Microsoft.OpenApi.Models;
+using ICAR.Scanner.WebApi.Automapper;
+using ICAR.Scanner.DataAccess.Context;
+using ICAR.Scanner.DataAccess.Repository;
+using Microsoft.EntityFrameworkCore;
+using ICAR.Scanner.Services.Services.UserService;
+using ICAR.Scanner.Services.Services.MapperService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-var corsPolicy = "policy";
+// var corsPolicy = "policy";
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<ICARDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
+);
+
+builder.Services.AddICARAutoMapper(); // Registers AutoMapper and your generic service
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -21,6 +36,7 @@ var app = builder.Build();
 //                       });
 // });
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -28,6 +44,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 var summaries = new[]
 {

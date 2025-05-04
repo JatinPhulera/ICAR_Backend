@@ -7,13 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Automapper/" />
     <Folder Include="Filters/" />
     <Folder Include="StaticFiles/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICAR.Scanner.Services\ICAR.Scanner.Services.csproj" />
+    <ProjectReference Include="..\ICAR.Scanner.Models\ICAR.Scanner.Models.csproj" />
+    <ProjectReference Include="..\ICAR.Scanner.DataAccess\ICAR.Scanner.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
