@@ -10,4 +10,13 @@
     <Folder Include="Helper/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ICAR.Scanner.DataAccess\ICAR.Scanner.DataAccess.csproj" />
+    <ProjectReference Include="..\ICAR.Scanner.Models\ICAR.Scanner.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+  </ItemGroup>
+
 </Project>
