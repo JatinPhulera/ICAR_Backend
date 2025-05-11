@@ -223,6 +223,153 @@ END
 END
 GO
 
+----CHANGES BY RANJAN
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Institutions')
+BEGIN
+CREATE TABLE Institutions (
+    InstitutionID INT IDENTITY(1,1) NOT NULL,
+    InstitutionName VARCHAR(100) NOT NULL,
+    InstitutionHead VARCHAR(100) NULL,
+	InstitutionAdress VARCHAR(1000) NULL,
+	Status BIT DEFAULT 1, 
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_Institutions PRIMARY KEY (InstitutionID)
+);
+END
+GO
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = '73e0409c-7b5b-4ea9-b116-4ca3e8b77a06';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+    INSERT INTO Institutions (InstitutionName, InstitutionHead) VALUES
+    ('NBPGR', 'NBPGR'),
+    ('CAFRI', 'CAFRI'),
+    ('IIHR', 'IIHR')
+
+END
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'RoleMaster')
+BEGIN
+CREATE TABLE RoleMaster (
+    RoleID  INT IDENTITY(1,1) NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+	Status BIT DEFAULT 1,    
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_RoleMaster PRIMARY KEY (RoleID)
+);
+END
+GO
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = '73e0409c-7b5b-4ea9-b116-4ca3e8b77a06';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+    INSERT INTO RoleMaster (Name) VALUES
+    ('SUPER ADMIN'),
+    ('ADMIN'),
+    ('FIELD STAFF')
+
+END
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
+BEGIN
+CREATE TABLE Users
+(
+    UserId              UNIQUEIDENTIFIER NOT NULL,
+    Username            NVARCHAR(50) NOT NULL UNIQUE,
+    Email               NVARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash        NVARCHAR(255) NOT NULL,
+    FirstName           NVARCHAR(50),
+    LastName            NVARCHAR(50),
+    DateOfBirth         DATE,
+    PhoneNumber         NVARCHAR(20),
+    IsEmailVerified     BIT DEFAULT 0,
+    IsActive            BIT DEFAULT 1,
+    IsLocked            BIT DEFAULT 0,
+    LastLoginAt         DATETIME,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+    ResetToken          NVARCHAR(255),
+    ResetTokenExpiry    DATETIME,
+    MfaEnabled          BIT DEFAULT 0,
+    MfaSecret           NVARCHAR(255),
+    ProfilePictureUrl   NVARCHAR(255),
+    AddressId           UNIQUEIDENTIFIER NULL, -- FK to Addresses
+	RoleID				INT,
+	InstitutionID		INT,
+    CONSTRAINT PK_Users PRIMARY KEY (UserId),
+    CONSTRAINT FK_Users_Addresses FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId),
+	CONSTRAINT FK_Users_RoleMaster FOREIGN KEY (RoleID) REFERENCES RoleMaster(RoleID),
+	CONSTRAINT FK_Users_Institutions FOREIGN KEY (InstitutionID) REFERENCES Institutions(InstitutionID)
+);
+END
+GO
+
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = '2074c9af-e057-4b59-abf2-257cf1148116';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+        -- ===========================================
+    -- Insert Dummy Address and User #1
+    -- ===========================================
+    DECLARE @AddressId1 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @UserId1    UNIQUEIDENTIFIER = NEWID();
+
+    INSERT INTO Addresses (AddressId, AddressLine1, AddressLine2, City, StateId, PostalCode, CountryId, IsActive) VALUES (
+        @AddressId1, '123 Main St', 'Apt 101', 'Springfield', 1, '12345', 1, 1);
+
+    INSERT INTO Users (UserId, Username, Email, PasswordHash, FirstName, LastName, DateOfBirth, PhoneNumber, IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
+        ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID) 
+        VALUES (@UserId1, 'JP', 'jp@jp.com', 'hashedpassword1', 'Jatin', 'P', '1990-01-01', '555-1234',
+        1, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
+        NULL, NULL, 0, NULL, NULL, @AddressId1,1,1
+    );
+
+    -- ===========================================
+    -- Insert Dummy Address and User #2
+    -- ===========================================
+    DECLARE @AddressId2 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @UserId2    UNIQUEIDENTIFIER = NEWID();
+
+    INSERT INTO Addresses (
+        AddressId, AddressLine1, AddressLine2, City, StateId, PostalCode, CountryId, IsActive
+    ) VALUES (
+        @AddressId2, '456 Elm St', NULL, 'Shelbyville', 2, '67890', 1, 1
+    );
+
+    INSERT INTO Users (
+        UserId, Username, Email, PasswordHash, FirstName, LastName, DateOfBirth, PhoneNumber,
+        IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
+        ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID
+    ) VALUES (
+        @UserId2, 'JP Test', 'jptest@gmail.com', 'hashedpassword2', 'JP', 'Test', '1995-05-15', '555-5678',
+        0, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
+        NULL, NULL, 0, NULL, NULL, @AddressId2,1,1
+    );
+
+    INSERT INTO ScriptLog (ScriptLogId) VALUES (@ScriptLogId);
+END
+END
+
+
+
+---
+
 -- SELECT * FROM Countries
 -- SELECT * FROM States
 -- SELECT * FROM Addresses
