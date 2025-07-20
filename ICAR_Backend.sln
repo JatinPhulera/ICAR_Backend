@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICAR.Scanner.Core", "ICAR.Scanner.Core\ICAR.Scanner.Core.csproj", "{888E9733-E3BB-3C77-73C1-34E880BF210E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICAR.Scanner.DataAccess", "ICAR.Scanner.DataAccess\ICAR.Scanner.DataAccess.csproj", "{7FF9D1D0-B4F0-B458-E752-846EC3EDCF4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICAR.Scanner.Models", "ICAR.Scanner.Models\ICAR.Scanner.Models.csproj", "{A9D41E57-930E-1016-BC7E-8B8FCB6B6F0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICAR.Scanner.Services", "ICAR.Scanner.Services\ICAR.Scanner.Services.csproj", "{94ABBE7E-ECA2-6E8C-5E29-9754E39E9243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICAR.Scanner.WebApi", "ICAR.Scanner.WebApi\ICAR.Scanner.WebApi.csproj", "{784BD6DA-425B-D46B-D75F-887E1F44B43C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{888E9733-E3BB-3C77-73C1-34E880BF210E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{888E9733-E3BB-3C77-73C1-34E880BF210E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{888E9733-E3BB-3C77-73C1-34E880BF210E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{888E9733-E3BB-3C77-73C1-34E880BF210E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FF9D1D0-B4F0-B458-E752-846EC3EDCF4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FF9D1D0-B4F0-B458-E752-846EC3EDCF4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FF9D1D0-B4F0-B458-E752-846EC3EDCF4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FF9D1D0-B4F0-B458-E752-846EC3EDCF4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9D41E57-930E-1016-BC7E-8B8FCB6B6F0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9D41E57-930E-1016-BC7E-8B8FCB6B6F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9D41E57-930E-1016-BC7E-8B8FCB6B6F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9D41E57-930E-1016-BC7E-8B8FCB6B6F0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94ABBE7E-ECA2-6E8C-5E29-9754E39E9243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94ABBE7E-ECA2-6E8C-5E29-9754E39E9243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94ABBE7E-ECA2-6E8C-5E29-9754E39E9243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94ABBE7E-ECA2-6E8C-5E29-9754E39E9243}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784BD6DA-425B-D46B-D75F-887E1F44B43C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784BD6DA-425B-D46B-D75F-887E1F44B43C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784BD6DA-425B-D46B-D75F-887E1F44B43C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784BD6DA-425B-D46B-D75F-887E1F44B43C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {152D75A7-9CA9-432B-ACB2-E682F5F24997}
+	EndGlobalSection
+EndGlobal

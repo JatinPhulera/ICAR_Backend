@@ -22,6 +22,8 @@ builder.Services.AddICARAutoMapper(); // Registers AutoMapper and your generic s
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -41,6 +43,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();
