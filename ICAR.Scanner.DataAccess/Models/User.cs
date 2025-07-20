@@ -49,5 +49,13 @@ public partial class User
 
     public Guid? AddressId { get; set; }
 
+    public int? RoleID { get; set; }
+
+    public int? InstitutionID { get; set; }
+
     public virtual Address? Address { get; set; }
+
+    public virtual Institution? Institution { get; set; }
+
+    public virtual RoleMaster? Role { get; set; }
 }
