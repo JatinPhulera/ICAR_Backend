@@ -292,7 +292,8 @@ CREATE TABLE Users
     Email               NVARCHAR(255) NOT NULL UNIQUE,
     PasswordHash        NVARCHAR(255) NOT NULL,
     FirstName           NVARCHAR(50),
-    LastName            NVARCHAR(50),
+    LastName            NVARCHAR(50),    
+    Address             NVARCHAR(Max),
     DateOfBirth         DATE,
     PhoneNumber         NVARCHAR(20),
     IsEmailVerified     BIT DEFAULT 0,
@@ -333,9 +334,9 @@ BEGIN
     INSERT INTO Addresses (AddressId, AddressLine1, AddressLine2, City, StateId, PostalCode, CountryId, IsActive) VALUES (
         @AddressId1, '123 Main St', 'Apt 101', 'Springfield', 1, '12345', 1, 1);
 
-    INSERT INTO Users (UserId, Username, Email, PasswordHash, FirstName, LastName, DateOfBirth, PhoneNumber, IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
+    INSERT INTO Users (UserId, Username, Email, PasswordHash, FirstName, LastName,Address, DateOfBirth, PhoneNumber, IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
         ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID) 
-        VALUES (@UserId1, 'JP', 'jp@jp.com', 'hashedpassword1', 'Jatin', 'P', '1990-01-01', '555-1234',
+        VALUES (@UserId1, 'JP', 'jp@jp.com', 'hashedpassword1', 'Jatin', 'P','Address-1', '1990-01-01', '555-1234',
         1, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
         NULL, NULL, 0, NULL, NULL, @AddressId1,1,1
     );
@@ -353,11 +354,11 @@ BEGIN
     );
 
     INSERT INTO Users (
-        UserId, Username, Email, PasswordHash, FirstName, LastName, DateOfBirth, PhoneNumber,
+        UserId, Username, Email, PasswordHash, FirstName, LastName, Address, DateOfBirth, PhoneNumber,
         IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
         ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID
     ) VALUES (
-        @UserId2, 'JP Test', 'jptest@gmail.com', 'hashedpassword2', 'JP', 'Test', '1995-05-15', '555-5678',
+        @UserId2, 'JP Test', 'jptest@gmail.com', 'hashedpassword2', 'JP', 'Test','Address-1', '1995-05-15', '555-5678',
         0, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
         NULL, NULL, 0, NULL, NULL, @AddressId2,1,1
     );

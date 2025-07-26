@@ -24,6 +24,4 @@ public partial class Address
     public virtual Country Country { get; set; } = null!;
 
     public virtual State State { get; set; } = null!;
-
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

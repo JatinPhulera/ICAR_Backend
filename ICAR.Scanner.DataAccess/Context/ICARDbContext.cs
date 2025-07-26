@@ -20,9 +20,15 @@ public partial class ICARDbContext : DbContext
 
     public virtual DbSet<RoleMaster> RoleMasters { get; set; }
 
+    public virtual DbSet<SENSOR> SENSORs { get; set; }
+
+    public virtual DbSet<SENSORTYPE> SENSORTYPEs { get; set; }
+
     public virtual DbSet<ScriptLog> ScriptLogs { get; set; }
 
     public virtual DbSet<State> States { get; set; }
+
+    public virtual DbSet<TREE> TREEs { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -97,6 +103,58 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<SENSOR>(entity =>
+        {
+            entity.ToTable("SENSORS");
+
+            entity.Property(e => e.SENSORID).ValueGeneratedNever();
+            entity.Property(e => e.AccessionNumber).HasMaxLength(255);
+            entity.Property(e => e.CommonName).HasMaxLength(255);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.SENSORTYPE).HasMaxLength(255);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UserName).HasMaxLength(255);
+            entity.Property(e => e.accession_number).HasMaxLength(255);
+            entity.Property(e => e.addedBy).HasMaxLength(255);
+            entity.Property(e => e.assetID).HasMaxLength(255);
+            entity.Property(e => e.batteryPercentage).HasMaxLength(255);
+            entity.Property(e => e.custID).HasMaxLength(255);
+            entity.Property(e => e.displayID).HasMaxLength(255);
+            entity.Property(e => e.expiry_date).HasColumnType("datetime");
+            entity.Property(e => e.installation_date).HasColumnType("datetime");
+            entity.Property(e => e.isHooterOn).HasDefaultValue(true);
+            entity.Property(e => e.isSensitivity).HasDefaultValue(true);
+            entity.Property(e => e.messageType).HasMaxLength(255);
+            entity.Property(e => e.sensitivityValue).HasMaxLength(255);
+
+            entity.HasOne(d => d.SENSORTYPENavigation).WithMany(p => p.SENSORs)
+                .HasForeignKey(d => d.SENSORTYPEID)
+                .HasConstraintName("FK_SENSORS_SENSORTYPE");
+        });
+
+        modelBuilder.Entity<SENSORTYPE>(entity =>
+        {
+            entity.ToTable("SENSORTYPE");
+
+            entity.HasIndex(e => e.SENSORTYPE1, "UQ__SENSORTY__B839916C8D1926B1").IsUnique();
+
+            entity.Property(e => e.SENSORTYPEID).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.SENSORTYPE1)
+                .HasMaxLength(255)
+                .HasColumnName("SENSORTYPE");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<ScriptLog>(entity =>
         {
             entity.HasKey(e => e.ScriptLogId).HasName("PK__ScriptLo__F1F5130E00344A9D");
@@ -122,11 +180,42 @@ public partial class ICARDbContext : DbContext
                 .HasConstraintName("FK_States_Countries");
         });
 
+        modelBuilder.Entity<TREE>(entity =>
+        {
+            entity.HasKey(e => e.TREEID).HasName("PK_TREEID");
+
+            entity.ToTable("TREES");
+
+            entity.Property(e => e.TREEID).ValueGeneratedNever();
+            entity.Property(e => e.ACCESSIONNUMBER).HasMaxLength(255);
+            entity.Property(e => e.COMMONNAME).HasMaxLength(255);
+            entity.Property(e => e.CULTIVERNAME).HasMaxLength(255);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DONORORGANIZATION).HasMaxLength(255);
+            entity.Property(e => e.FGBLOCATION).HasMaxLength(255);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.PLACEOFORGIN).HasMaxLength(255);
+            entity.Property(e => e.PLANTATIONYEAR).HasMaxLength(255);
+            entity.Property(e => e.ProfilePictureUrl).HasMaxLength(255);
+            entity.Property(e => e.SCIENTIFICNAME).HasMaxLength(255);
+            entity.Property(e => e.SENSORTYPE).HasMaxLength(255);
+            entity.Property(e => e.UNIQUEIMPORTANCE).HasMaxLength(255);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.SENSOR).WithMany(p => p.TREEs)
+                .HasForeignKey(d => d.SENSORID)
+                .HasConstraintName("FK_TREES_SENSORID");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4B8D639C7").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4532EFF7F").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D105341A6DC4E0").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053429FFC697").IsUnique();
 
             entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -150,10 +239,6 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.Username).HasMaxLength(50);
-
-            entity.HasOne(d => d.Address).WithMany(p => p.Users)
-                .HasForeignKey(d => d.AddressId)
-                .HasConstraintName("FK_Users_Addresses");
 
             entity.HasOne(d => d.Institution).WithMany(p => p.Users)
                 .HasForeignKey(d => d.InstitutionID)

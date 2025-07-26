@@ -17,6 +17,12 @@ public partial class User
 
     public string? LastName { get; set; }
 
+    public string? Address { get; set; }
+
+    public string? Address1 { get; set; }
+
+    public string? Address2 { get; set; }
+
     public DateOnly? DateOfBirth { get; set; }
 
     public string? PhoneNumber { get; set; }
@@ -47,13 +53,9 @@ public partial class User
 
     public string? ProfilePictureUrl { get; set; }
 
-    public Guid? AddressId { get; set; }
-
     public int? RoleID { get; set; }
 
     public int? InstitutionID { get; set; }
-
-    public virtual Address? Address { get; set; }
 
     public virtual Institution? Institution { get; set; }
 
