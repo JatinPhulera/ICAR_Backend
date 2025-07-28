@@ -15,6 +15,6 @@ namespace ICAR.Scanner.Models.DTOs;
         [Required]
          public string? PhoneNumber { get; set; } = null!;
 
-    [Required]
+        [Required]
         public int? RoleID { get; set; } = null!;
 }

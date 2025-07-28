@@ -9,9 +9,9 @@ namespace ICAR.Scanner.WebApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly ITREESService _userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(ITREESService userService)
         {
             _userService = userService;
         }

@@ -1,0 +1,14 @@
+using ICAR.Scanner.DataAccess.Models;
+using ICAR.Scanner.Models.DTOs;
+
+namespace ICAR.Scanner.Services.Services.SensorService;
+
+public interface ISensorService
+{
+    Task<IEnumerable<SensorDTO>> GetAllSensorsAsync();
+    Task<SensorDTO?> GetSensorByIdAsync(Guid userId);
+    Task<SensorDTO> CreateSensorAsync(SensorCreateDTO sesorCreateDto);
+    Task<bool> UpdateSensorAsync(SensorDTO userDto);
+    Task<bool> DeleteSensorAsync(Guid userId);
+}
+
