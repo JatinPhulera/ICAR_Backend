@@ -14,30 +14,30 @@ namespace ICAR.Scanner.WebApi.Controllers
             _treeService = treeService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TREESDTO>>> GetAllTrees()
+        public async Task<ActionResult<IEnumerable<TreesDto>>> GetAllTrees()
         {
             var sensors = await _treeService.GetAllTreeAsync();
             return Ok(sensors);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TREESDTO>> GetTree(Guid id)
+        public async Task<ActionResult<TreesDto>> GetTree(Guid id)
         {
             var sensor = await _treeService.GetTreeByIdAsync(id);
             return sensor != null ? Ok(sensor) : NotFound();
         }
 
         [HttpPost]
-        public async Task<ActionResult<TREESDTO>> CreateSensor(TREESCreateDTO treeCreateDto)
+        public async Task<ActionResult<TreesDto>> CreateSensor(TREESCreateDTO treeCreateDto)
         {
             var createdTree = await _treeService.CreateTreeAsync(treeCreateDto);
-            return CreatedAtAction(nameof(GetTree), new { id = createdTree.TREEID }, createdTree);
+            return CreatedAtAction(nameof(GetTree), new { id = createdTree.TreeId }, createdTree);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTree(Guid id, TREESDTO treeDto)
+        public async Task<IActionResult> UpdateTree(Guid id, TreesDto treeDto)
         {
-            if (id != treeDto.TREEID) return BadRequest();
+            if (id != treeDto.TreeId) return BadRequest();
             var result = await _treeService.UpdateTreeAsync(treeDto);
             return result ? NoContent() : NotFound();
         }

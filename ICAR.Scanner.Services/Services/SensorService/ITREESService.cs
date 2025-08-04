@@ -5,10 +5,10 @@ namespace ICAR.Scanner.Services.Services.TreeService;
 
     public interface ITREESService
     {
-        Task<IEnumerable<TREESDTO>> GetAllTreeAsync();
-        Task<TREESDTO?> GetTreeByIdAsync(Guid treeId);
-        Task<TREESDTO> CreateTreeAsync(TREESCreateDTO treeCreateDto);
-        Task<bool> UpdateTreeAsync(TREESDTO treeDto);
-        Task<bool> DeleteTreeAsync(Guid treeId);
+        Task<IEnumerable<TreesDto>> GetAllTreeAsync();
+        Task<TreesDto?> GetTreeByIdAsync(Guid TreeId);
+        Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto);
+        Task<bool> UpdateTreeAsync(TreesDto treeDto);
+        Task<bool> DeleteTreeAsync(Guid TreeId);
     }
 

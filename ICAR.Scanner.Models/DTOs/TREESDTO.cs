@@ -1,50 +1,26 @@
-using System.Net;
-
 namespace ICAR.Scanner.Models.DTOs;
 
-public class TREESDTO
+public class TreesDto
 {
-    public Guid TREEID { get; set; }
-
-    public string? COMMONNAME { get; set; }
-
-    public string? CULTIVERNAME { get; set; }
-
-    public string? ACCESSIONNUMBER { get; set; }
-
-    public string? SCIENTIFICNAME { get; set; }
-
-    public string? DONORORGANIZATION { get; set; }
-
-    public string? PLACEOFORGIN { get; set; }
-
-    public string? FGBLOCATION { get; set; }
-
-    public string? UNIQUEIMPORTANCE { get; set; }
-
-    public string? PLANTATIONYEAR { get; set; }
-
-    public string? SENSORTYPE { get; set; }
-
-    public string? SENSORUID { get; set; }
-
-    public string? SELECTFIELDSTAFF { get; set; }
-
-    public string? age_units { get; set; }
-
+    public Guid TreeId { get; set; }
+    public string? CommonName { get; set; }
+    public string? CultiverName { get; set; }
+    public string? AccessionNumber { get; set; }
+    public string? ScientificName { get; set; }
+    public string? DonorOrganization { get; set; }
+    public string? PlaceOfOrigin { get; set; }
+    public string? FgbLocation { get; set; }
+    public string? UniqueImportance { get; set; }
+    public string? PlantationYear { get; set; }
+    public string? SensorType { get; set; }
+    public string? SensorUid { get; set; }
+    public string? SelectFieldStaff { get; set; }
+    public string? AgeUnits { get; set; }
     public string? ProfilePictureUrl { get; set; }
-
     public bool? IsActive { get; set; }
-
     public DateTime CreatedOn { get; set; }
-
     public DateTime? UpdatedOn { get; set; }
-
     public string? CreatedBy { get; set; }
-
     public string? UpdatedBy { get; set; }
-
-    public Guid? SENSORID { get; set; }
-
-    
+    public Guid? SensorId { get; set; }
 }

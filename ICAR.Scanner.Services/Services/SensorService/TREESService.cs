@@ -16,19 +16,19 @@ public class TREESService : ITREESService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TREESDTO>> GetAllTreeAsync()
+        public async Task<IEnumerable<TreesDto>> GetAllTreeAsync()
         {
             var trees = await _treeRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<TREESDTO>>(trees);
+            return _mapper.Map<IEnumerable<TreesDto>>(trees);
         }
 
-        public async Task<TREESDTO?> GetTreeByIdAsync(Guid treeId)
+        public async Task<TreesDto?> GetTreeByIdAsync(Guid TreeId)
         {
-            var tree = await _treeRepository.GetByIdAsync(treeId);
-            return tree == null ? null : _mapper.Map<TREESDTO>(tree);
+            var tree = await _treeRepository.GetByIdAsync(TreeId);
+            return tree == null ? null : _mapper.Map<TreesDto>(tree);
         }
 
-        public async Task<TREESDTO> CreateTreeAsync(TREESCreateDTO treeCreateDto)
+        public async Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto)
         {
             var user = _mapper.Map<TREE>(treeCreateDto);
             user.TREEID = Guid.NewGuid();
@@ -38,12 +38,12 @@ public class TREESService : ITREESService
 
             await _treeRepository.AddAsync(user);
 
-            return _mapper.Map<TREESDTO>(user);
+            return _mapper.Map<TreesDto>(user);
         }
 
-        public async Task<bool> UpdateTreeAsync(TREESDTO treeDto)
+        public async Task<bool> UpdateTreeAsync(TreesDto treeDto)
         {
-            var tree = await _treeRepository.GetByIdAsync(treeDto.TREEID);
+            var tree = await _treeRepository.GetByIdAsync(treeDto.TreeId);
             if (tree == null) return false;
 
             _mapper.Map(treeDto, tree); // Map updated fields from DTO to entity
@@ -53,9 +53,9 @@ public class TREESService : ITREESService
             return true;
         }
 
-        public async Task<bool> DeleteTreeAsync(Guid treeId)
+        public async Task<bool> DeleteTreeAsync(Guid TreeId)
         {
-            var tree = await _treeRepository.GetByIdAsync(treeId);
+            var tree = await _treeRepository.GetByIdAsync(TreeId);
             if (tree == null) return false;
 
             await _treeRepository.DeleteAsync(tree);
