@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ICAR.Scanner.Models.DTOs;
+namespace ICAR.Scanner.Models.DTOs.Request;
     public class SensorCreateDTO
 {
 

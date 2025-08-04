@@ -1,7 +1,7 @@
 ﻿using ICAR.Scanner.Models.DTOs;
-using ICAR.Scanner.Services.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 using ICAR.Scanner.Services.Services.SensorService;
+using ICAR.Scanner.Models.DTOs.Request;
 
 namespace ICAR.Scanner.WebApi.Controllers
 {
@@ -34,13 +34,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<SensorDTO>> CreateSensor(SensorCreateDTO sensorCreateDto)
         {
             var createdSensor = await _sensorService.CreateSensorAsync(sensorCreateDto);
-            return CreatedAtAction(nameof(GetSensor), new { id = createdSensor.SENSORID }, createdSensor);
+            return CreatedAtAction(nameof(GetSensor), new { id = createdSensor.SensorId }, createdSensor);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSensor(Guid id, SensorDTO sensorDto)
         {
-            if (id != sensorDto.SENSORID) return BadRequest();
+            if (id != sensorDto.SensorId) return BadRequest();
             var result = await _sensorService.UpdateSensorAsync(sensorDto);
             return result ? NoContent() : NotFound();
         }

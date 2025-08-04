@@ -7,10 +7,10 @@ namespace ICAR.Scanner.Services.Services.TreeService;
 
 public class TREESService : ITREESService
     {
-        private readonly IRepository<TREE> _treeRepository;
+        private readonly IRepository<Tree> _treeRepository;
         private readonly IMapper _mapper;
 
-        public TREESService(IRepository<TREE> treeRepository, IMapper mapper)
+        public TREESService(IRepository<Tree> treeRepository, IMapper mapper)
         {
             _treeRepository = treeRepository;
             _mapper = mapper;
@@ -30,8 +30,8 @@ public class TREESService : ITREESService
 
         public async Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto)
         {
-            var user = _mapper.Map<TREE>(treeCreateDto);
-            user.TREEID = Guid.NewGuid();
+            var user = _mapper.Map<Tree>(treeCreateDto);
+            user.TreeId = Guid.NewGuid();
             //user.PasswordHash = HashPassword(treeCreateDto.Password);
             user.CreatedOn = DateTime.UtcNow;
             user.IsActive = true;

@@ -41,9 +41,9 @@ public class UserDTO
 
     public Guid? AddressId { get; set; }
 
-    public int? RoleID { get; set; }
+    public int? RoleId { get; set; }
 
-    public int? InstitutionID { get; set; }
+    public int? InstitutionId { get; set; }
 
    // public virtual Address? Address { get; set; }
 

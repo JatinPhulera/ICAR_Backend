@@ -2,15 +2,16 @@ using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.DataAccess.Repository;
 using ICAR.Scanner.Models.DTOs;
 using AutoMapper;
+using ICAR.Scanner.Models.DTOs.Request;
 
 namespace ICAR.Scanner.Services.Services.SensorService;
 
 public class SensorService : ISensorService
 {
-        private readonly IRepository<SENSOR> _sensorRepository;
+        private readonly IRepository<Sensor> _sensorRepository;
         private readonly IMapper _mapper;
 
-        public SensorService(IRepository<SENSOR> sensorRepository, IMapper mapper)
+        public SensorService(IRepository<Sensor> sensorRepository, IMapper mapper)
         {
             _sensorRepository = sensorRepository;
             _mapper = mapper;
@@ -30,8 +31,8 @@ public class SensorService : ISensorService
 
         public async Task<SensorDTO> CreateSensorAsync(SensorCreateDTO sensorCreateDto)
         {
-            var sensor = _mapper.Map<SENSOR>(sensorCreateDto);
-            sensor.SENSORID = Guid.NewGuid();
+            var sensor = _mapper.Map<Sensor>(sensorCreateDto);
+            sensor.SensorId = Guid.NewGuid();
             //sensor.PasswordHash = HashPassword(sensorCreateDto.Password);
             sensor.CreatedOn = DateTime.UtcNow;
             sensor.IsActive = true;
@@ -43,7 +44,7 @@ public class SensorService : ISensorService
 
         public async Task<bool> UpdateSensorAsync(SensorDTO sensorDto)
         {
-            var sesnsor = await _sensorRepository.GetByIdAsync(sensorDto.SENSORID);
+            var sesnsor = await _sensorRepository.GetByIdAsync(sensorDto.SensorId);
             if (sesnsor == null) return false;
 
             _mapper.Map(sensorDto, sesnsor); // Map updated fields from DTO to entity

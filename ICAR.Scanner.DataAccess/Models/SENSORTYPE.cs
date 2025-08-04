@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ICAR.Scanner.DataAccess.Models;
 
-public partial class SENSORTYPE
+public partial class SensorType
 {
-    public Guid SENSORTYPEID { get; set; }
+    public Guid SensorTypeId { get; set; }
 
-    public string SENSORTYPE1 { get; set; } = null!;
+    public string SensorTypeName { get; set; } = null!;
 
-    public string? SENSORUID { get; set; }
+    public string? SensorUid { get; set; }
 
     public DateTime CreatedOn { get; set; }
 
@@ -19,5 +19,5 @@ public partial class SENSORTYPE
 
     public string? UpdatedBy { get; set; }
 
-    public virtual ICollection<SENSOR> SENSORs { get; set; } = new List<SENSOR>();
+    public virtual ICollection<Sensor> Sensors { get; set; } = new List<Sensor>();
 }

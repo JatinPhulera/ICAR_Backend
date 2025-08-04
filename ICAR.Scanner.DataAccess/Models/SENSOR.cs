@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ICAR.Scanner.DataAccess.Models;
 
-public partial class SENSOR
+public partial class Sensor
 {
-    public Guid SENSORID { get; set; }
+    public Guid SensorId { get; set; }
 
-    public string? SENSORTYPE { get; set; }
+    public string? SensorType { get; set; }
 
-    public string? SENSORUID { get; set; }
+    public string? SensorUid { get; set; }
 
     public string? CommonName { get; set; }
 
@@ -17,29 +17,29 @@ public partial class SENSOR
 
     public string? UserName { get; set; }
 
-    public string? addedBy { get; set; }
+    public string? AddedBy { get; set; }
 
-    public string? custID { get; set; }
+    public string? CustId { get; set; }
 
-    public string? assetID { get; set; }
+    public string? AssetId { get; set; }
 
-    public string? displayID { get; set; }
+    public string? DisplayId { get; set; }
 
-    public string? accession_number { get; set; }
+    public string? AccessionNumberAlt { get; set; }
 
-    public DateTime? expiry_date { get; set; }
+    public DateTime? ExpiryDate { get; set; }
 
-    public string? batteryPercentage { get; set; }
+    public string? BatteryPercentage { get; set; }
 
-    public string? messageType { get; set; }
+    public string? MessageType { get; set; }
 
-    public bool? isHooterOn { get; set; }
+    public bool? IsHooterOn { get; set; }
 
-    public bool? isSensitivity { get; set; }
+    public bool? IsSensitivity { get; set; }
 
-    public string? sensitivityValue { get; set; }
+    public string? SensitivityValue { get; set; }
 
-    public DateTime? installation_date { get; set; }
+    public DateTime? InstallationDate { get; set; }
 
     public bool? IsActive { get; set; }
 
@@ -51,9 +51,9 @@ public partial class SENSOR
 
     public string? UpdatedBy { get; set; }
 
-    public Guid? SENSORTYPEID { get; set; }
+    public Guid? SensorTypeId { get; set; }
 
-    public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
+    public virtual SensorType? SensorTypeNavigation { get; set; }
 
-    public virtual ICollection<TREE> TREEs { get; set; } = new List<TREE>();
+    public virtual ICollection<Tree> Trees { get; set; } = new List<Tree>();
 }

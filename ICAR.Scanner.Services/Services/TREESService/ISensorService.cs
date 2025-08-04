@@ -1,5 +1,6 @@
 using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.Models.DTOs;
+using ICAR.Scanner.Models.DTOs.Request;
 
 namespace ICAR.Scanner.Services.Services.SensorService;
 
