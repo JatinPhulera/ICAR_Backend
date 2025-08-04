@@ -1,9 +1,6 @@
 ﻿using ICAR.Scanner.Models.DTOs;
 using ICAR.Scanner.Services.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using ICAR.Scanner.Models.DTOs;
-using ICAR.Scanner.Services.Services.UserService;
 using ICAR.Scanner.Services.Services.SensorService;
 
 namespace ICAR.Scanner.WebApi.Controllers

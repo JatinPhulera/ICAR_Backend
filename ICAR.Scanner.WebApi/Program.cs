@@ -3,8 +3,7 @@ using ICAR.Scanner.WebApi.Automapper;
 using ICAR.Scanner.DataAccess.Context;
 using ICAR.Scanner.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
-using ICAR.Scanner.Services.Services.UserService;
-using ICAR.Scanner.Services.Services.MapperService;
+using ICAR.Scanner.Services.Services.TreeService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,19 +24,20 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Angular frontend origin
+              .AllowAnyMethod() // Allow GET, POST, PUT, DELETE
+              .AllowAnyHeader() // Allow headers like Authorization, Content-Type
+              .AllowCredentials(); // Allow credentials (e.g., for JWT authentication)
+    });
+});
+
 var app = builder.Build();
-
-// var allowedOrigins = builder.Configuration.GetSection($"AppSettings:AllowedOrigins");
-// builder.Services.AddCors(opti`ons =>
-// {
-//     options.AddPolicy(name: corsPolicy,
-//                       builder =>
-//                       {
-//                           builder.WithOrigins(allowedOrigins.Get<string[]>()).AllowAnyMethod().AllowAnyHeader()
-//                           .WithExposedHeaders("Content-Disposition"); // To do from App setting
-//                       });
-// });
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -48,7 +48,9 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // Optional, remove if not using HTTPS
+app.UseCors("AllowAngular"); // Apply CORS policy before Authorization
+app.UseAuthorization();
 app.MapControllers();
 
 var summaries = new[]

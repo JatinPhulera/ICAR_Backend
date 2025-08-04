@@ -5,12 +5,12 @@ using AutoMapper;
 
 namespace ICAR.Scanner.Services.Services.UserService;
 
-public class TREESService : ITREESService
+public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
-        public TREESService(IRepository<User> userRepository, IMapper mapper)
+        public UserService(IRepository<User> userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;

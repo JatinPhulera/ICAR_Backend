@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ICAR.Scanner.Models.DTOs;
 using ICAR.Scanner.Services.Services.UserService;
@@ -9,9 +8,9 @@ namespace ICAR.Scanner.WebApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly ITREESService _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(ITREESService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }

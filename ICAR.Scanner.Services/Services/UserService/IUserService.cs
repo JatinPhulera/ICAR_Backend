@@ -1,9 +1,8 @@
-using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.Models.DTOs;
 
 namespace ICAR.Scanner.Services.Services.UserService;
 
-    public interface ITREESService
+    public interface IUserService
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
         Task<UserDTO?> GetUserByIdAsync(Guid userId);
