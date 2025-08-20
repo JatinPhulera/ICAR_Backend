@@ -8,10 +8,10 @@ namespace ICAR.Scanner.Services.Services.SensorService;
 
 public class SensorService : ISensorService
 {
-        private readonly IRepository<Sensor> _sensorRepository;
+        private readonly IRepository<SENSOR> _sensorRepository;
         private readonly IMapper _mapper;
 
-        public SensorService(IRepository<Sensor> sensorRepository, IMapper mapper)
+        public SensorService(IRepository<SENSOR> sensorRepository, IMapper mapper)
         {
             _sensorRepository = sensorRepository;
             _mapper = mapper;
@@ -31,8 +31,8 @@ public class SensorService : ISensorService
 
         public async Task<SensorDTO> CreateSensorAsync(SensorCreateDTO sensorCreateDto)
         {
-            var sensor = _mapper.Map<Sensor>(sensorCreateDto);
-            sensor.SensorId = Guid.NewGuid();
+            var sensor = _mapper.Map<SENSOR>(sensorCreateDto);
+            sensor.SENSORID = Guid.NewGuid();
             //sensor.PasswordHash = HashPassword(sensorCreateDto.Password);
             sensor.CreatedOn = DateTime.UtcNow;
             sensor.IsActive = true;

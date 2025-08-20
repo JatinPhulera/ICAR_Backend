@@ -23,21 +23,21 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TreesDto>> GetTree(Guid id)
         {
-            var sensor = await _treeService.GetTreeByIdAsync(id);
-            return sensor != null ? Ok(sensor) : NotFound();
+            var tree = await _treeService.GetTreeByIdAsync(id);
+            return tree != null ? Ok(tree) : NotFound();
         }
 
         [HttpPost]
-        public async Task<ActionResult<TreesDto>> CreateSensor(TREESCreateDTO treeCreateDto)
+        public async Task<ActionResult<TreesDto>> CreateTree(TREESCreateDTO treeCreateDto)
         {
             var createdTree = await _treeService.CreateTreeAsync(treeCreateDto);
-            return CreatedAtAction(nameof(GetTree), new { id = createdTree.TreeId }, createdTree);
+            return CreatedAtAction(nameof(GetTree), new { id = createdTree.Id }, createdTree);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTree(Guid id, TreesDto treeDto)
         {
-            if (id != treeDto.TreeId) return BadRequest();
+            if (id != treeDto.Id) return BadRequest();
             var result = await _treeService.UpdateTreeAsync(treeDto);
             return result ? NoContent() : NotFound();
         }

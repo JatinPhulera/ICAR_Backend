@@ -17,4 +17,11 @@ namespace ICAR.Scanner.Models.DTOs;
 
         [Required]
         public int? RoleID { get; set; } = null!;
+
+        public string? FirstName { get; set; } = null!;
+
+        public string? LastName { get; set; } = null!;
+        public string? Address { get; set; } = null!;
+        public bool? IsActive { get; set; } = null!;
+        public DateTime? LastLoginAt { get; set; } = null!;
 }

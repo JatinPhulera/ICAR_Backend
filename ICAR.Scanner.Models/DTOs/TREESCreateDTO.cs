@@ -4,27 +4,29 @@ namespace ICAR.Scanner.Models.DTOs;
 public class TREESCreateDTO
 {
     [Required]
-    public string? COMMONNAME { get; set; } = null!;
-
-    public string? CULTIVERNAME { get; set; } = null!;
+    public Guid Id { get; set; }
     [Required]
-    public string? ACCESSIONNUMBER { get; set; } = null!;
+    public string? CommonName { get; set; } = null!;
+
+    public string? ScientificName { get; set; } = null!;
     [Required]
-    public string? SCIENTIFICNAME { get; set; } = null!;
-
-    public string? DONORORGANIZATION { get; set; } = null!;
-
-    public string? PLACEOFORGIN { get; set; } = null!;
+    public string? AccessionNumber { get; set; } = null!;
     [Required]
-    public string? FGBLOCATION { get; set; } = null!;
+    public string? BotanicalName { get; set; } = null!;
 
-    public string? UNIQUEIMPORTANCE { get; set; } = null!;
+    public string? DonorOrganization { get; set; } = null!;
 
-    public string? PLANTATIONYEAR { get; set; } = null!;
+    public string? PlaceOfOrigin { get; set; } = null!;
+    [Required]
+    public string? Location { get; set; } = null!;
 
-    public string? SENSORTYPE { get; set; } = null!;
+    public string? UniqueImportance { get; set; } = null!;
 
-    public string? SENSORUID { get; set; } = null!;
+    public DateTime? InstallationDate { get; set; } = null!;
 
-    public string? SELECTFIELDSTAFF { get; set; } = null!;
+    // public string? SensorType { get; set; } = null!;
+
+    public string? SENSORID { get; set; } = null!;
+
+    public string? OperatorName { get; set; } = null!;
 }

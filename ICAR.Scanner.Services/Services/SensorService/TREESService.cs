@@ -31,7 +31,7 @@ public class TREESService : ITREESService
         public async Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto)
         {
             var user = _mapper.Map<Tree>(treeCreateDto);
-            user.TreeId = Guid.NewGuid();
+            user.Id = Guid.NewGuid();
             //user.PasswordHash = HashPassword(treeCreateDto.Password);
             user.CreatedOn = DateTime.UtcNow;
             user.IsActive = true;
@@ -43,7 +43,7 @@ public class TREESService : ITREESService
 
         public async Task<bool> UpdateTreeAsync(TreesDto treeDto)
         {
-            var tree = await _treeRepository.GetByIdAsync(treeDto.TreeId);
+            var tree = await _treeRepository.GetByIdAsync(treeDto.Id);
             if (tree == null) return false;
 
             _mapper.Map(treeDto, tree); // Map updated fields from DTO to entity

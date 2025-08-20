@@ -4,6 +4,8 @@ using ICAR.Scanner.DataAccess.Context;
 using ICAR.Scanner.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using ICAR.Scanner.Services.Services.TreeService;
+using ICAR.Scanner.Services.Services.UserService;
+using ICAR.Scanner.Services.Services.SensorService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,9 @@ builder.Services.AddDbContext<ICARDbContext>(options =>
 
 builder.Services.AddICARAutoMapper(); // Registers AutoMapper and your generic service
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITREESService, TREESService>();
+builder.Services.AddScoped<ISensorService, SensorService>();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
@@ -30,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Angular frontend origin
+        policy.WithOrigins("http://localhost:5191") // Angular frontend origin
               .AllowAnyMethod() // Allow GET, POST, PUT, DELETE
               .AllowAnyHeader() // Allow headers like Authorization, Content-Type
               .AllowCredentials(); // Allow credentials (e.g., for JWT authentication)

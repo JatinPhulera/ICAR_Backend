@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ICAR.Scanner.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +20,9 @@ public partial class ICARDbContext : DbContext
 
     public virtual DbSet<RoleMaster> RoleMasters { get; set; }
 
-    public virtual DbSet<Sensor> Sensors { get; set; }
+    public virtual DbSet<SENSOR> SENSORs { get; set; }
 
-    public virtual DbSet<SensorType> SensorTypes { get; set; }
+    public virtual DbSet<SENSORTYPE> SENSORTYPEs { get; set; }
 
     public virtual DbSet<ScriptLog> ScriptLogs { get; set; }
 
@@ -103,11 +103,11 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Sensor>(entity =>
+        modelBuilder.Entity<SENSOR>(entity =>
         {
             entity.ToTable("SENSORS");
 
-            entity.Property(e => e.SensorId).ValueGeneratedNever();
+            entity.Property(e => e.SENSORID).ValueGeneratedNever();
             entity.Property(e => e.AccessionNumber).HasMaxLength(255);
             entity.Property(e => e.CommonName).HasMaxLength(255);
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -115,40 +115,40 @@ public partial class ICARDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
-            entity.Property(e => e.SensorType).HasMaxLength(255);
+            entity.Property(e => e.SENSORTYPE).HasMaxLength(255);
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(255);
-            entity.Property(e => e.AccessionNumberAlt).HasMaxLength(255);
-            entity.Property(e => e.AddedBy).HasMaxLength(255);
-            entity.Property(e => e.AssetId).HasMaxLength(255);
-            entity.Property(e => e.BatteryPercentage).HasMaxLength(255);
-            entity.Property(e => e.CustId).HasMaxLength(255);
-            entity.Property(e => e.DisplayId).HasMaxLength(255);
-            entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
-            entity.Property(e => e.InstallationDate).HasColumnType("datetime");
-            entity.Property(e => e.IsHooterOn).HasDefaultValue(true);
-            entity.Property(e => e.IsSensitivity).HasDefaultValue(true);
-            entity.Property(e => e.MessageType).HasMaxLength(255);
-            entity.Property(e => e.SensitivityValue).HasMaxLength(255);
+            entity.Property(e => e.accession_number).HasMaxLength(255);
+            entity.Property(e => e.addedBy).HasMaxLength(255);
+            entity.Property(e => e.assetID).HasMaxLength(255);
+            entity.Property(e => e.batteryPercentage).HasMaxLength(255);
+            entity.Property(e => e.custID).HasMaxLength(255);
+            entity.Property(e => e.displayID).HasMaxLength(255);
+            entity.Property(e => e.expiry_date).HasColumnType("datetime");
+            entity.Property(e => e.installation_date).HasColumnType("datetime");
+            entity.Property(e => e.isHooterOn).HasDefaultValue(true);
+            entity.Property(e => e.isSensitivity).HasDefaultValue(true);
+            entity.Property(e => e.messageType).HasMaxLength(255);
+            entity.Property(e => e.sensitivityValue).HasMaxLength(255);
 
-            entity.HasOne(d => d.SensorTypeNavigation).WithMany(p => p.Sensors)
-                .HasForeignKey(d => d.SensorTypeId)
+            entity.HasOne(d => d.SENSORTYPENavigation).WithMany(p => p.SENSORs)
+                .HasForeignKey(d => d.SENSORTYPEID)
                 .HasConstraintName("FK_SENSORS_SENSORTYPE");
         });
 
-        modelBuilder.Entity<SensorType>(entity =>
+        modelBuilder.Entity<SENSORTYPE>(entity =>
         {
             entity.ToTable("SENSORTYPE");
 
-            entity.HasIndex(e => e.SensorTypeName, "UQ__SENSORTY__B839916C8D1926B1").IsUnique();
+            entity.HasIndex(e => e.SENSORTYPE1, "UQ__SENSORTY__B839916C8D1926B1").IsUnique();
 
-            entity.Property(e => e.SensorTypeId).ValueGeneratedNever();
+            entity.Property(e => e.SENSORTYPEID).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.SensorTypeName)
+            entity.Property(e => e.SENSORTYPE1)
                 .HasMaxLength(255)
                 .HasColumnName("SENSORTYPE");
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
@@ -182,33 +182,61 @@ public partial class ICARDbContext : DbContext
 
         modelBuilder.Entity<Tree>(entity =>
         {
-            entity.HasKey(e => e.TreeId).HasName("PK_TREEID");
+            entity.HasKey(e => e.Id).HasName("PK_Id");
 
-            entity.ToTable("TREES");
+            entity.ToTable("Tree");
 
-            entity.Property(e => e.TreeId).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccessionNumber).HasMaxLength(255);
+            entity.Property(e => e.AccessionOrigin).HasMaxLength(255);
+            entity.Property(e => e.AddedBy).HasMaxLength(255);
+            entity.Property(e => e.AddedByName).HasMaxLength(255);
+            entity.Property(e => e.Age).HasMaxLength(255);
+            entity.Property(e => e.AgeUnits).HasMaxLength(255);
+            entity.Property(e => e.Alerts).HasMaxLength(255);
+            entity.Property(e => e.AssetId).HasMaxLength(255);
+            entity.Property(e => e.AssetSubType).HasMaxLength(255);
+            entity.Property(e => e.AssetType).HasMaxLength(255);
+            entity.Property(e => e.BotanicalName).HasMaxLength(255);
             entity.Property(e => e.CommonName).HasMaxLength(255);
-            entity.Property(e => e.CultiverName).HasMaxLength(255);
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.CultiverName).HasMaxLength(255);
+            entity.Property(e => e.DisplayId).HasMaxLength(255);
             entity.Property(e => e.DonorOrganization).HasMaxLength(255);
-            entity.Property(e => e.FgbLocation).HasMaxLength(255);
+            entity.Property(e => e.ExpiryDate).HasMaxLength(255);
+            entity.Property(e => e.ImageUrl).HasMaxLength(255);
+            entity.Property(e => e.Importance).HasMaxLength(255);
+            entity.Property(e => e.InstallationDate).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.LastAuditTime).HasMaxLength(255);
+            entity.Property(e => e.LastUpdated).HasColumnType("datetime");
+            entity.Property(e => e.Latitude).HasMaxLength(255);
+            entity.Property(e => e.Location).HasMaxLength(255);
+            entity.Property(e => e.Longitude).HasMaxLength(255);
+            entity.Property(e => e.OperatorFirstName).HasMaxLength(255);
+            entity.Property(e => e.OperatorId).HasMaxLength(255);
+            entity.Property(e => e.OperatorLastName).HasMaxLength(255);
+            entity.Property(e => e.OperatorName).HasMaxLength(255);
+            entity.Property(e => e.OperatorPhone).HasMaxLength(255);
+            entity.Property(e => e.OperatorState).HasMaxLength(255);
+            entity.Property(e => e.Origin).HasMaxLength(255);
             entity.Property(e => e.PlaceOfOrigin).HasMaxLength(255);
             entity.Property(e => e.PlantationYear).HasMaxLength(255);
-            entity.Property(e => e.ProfilePictureUrl).HasMaxLength(255);
+            entity.Property(e => e.RfidTagCreatedOn).HasMaxLength(255);
             entity.Property(e => e.ScientificName).HasMaxLength(255);
             entity.Property(e => e.SensorType).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
             entity.Property(e => e.UniqueImportance).HasMaxLength(255);
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Value).HasMaxLength(255);
 
-            entity.HasOne(d => d.Sensor).WithMany(p => p.Trees)
-                .HasForeignKey(d => d.SensorId)
-                .HasConstraintName("FK_TREES_SENSORID");
+            entity.HasOne(d => d.SENSOR).WithMany(p => p.Trees)
+                .HasForeignKey(d => d.SENSORID)
+                .HasConstraintName("FK_Tree_SENSORID");
         });
 
         modelBuilder.Entity<User>(entity =>
