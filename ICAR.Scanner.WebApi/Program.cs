@@ -21,7 +21,7 @@ builder.Services.AddDbContext<ICARDbContext>(options =>
 
 builder.Services.AddICARAutoMapper(); // Registers AutoMapper and your generic service
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuditTreeService, AuditTreeService>();
 builder.Services.AddScoped<ITREESService, TREESService>();
 builder.Services.AddScoped<ISensorService, SensorService>();
 builder.Services.AddControllers();

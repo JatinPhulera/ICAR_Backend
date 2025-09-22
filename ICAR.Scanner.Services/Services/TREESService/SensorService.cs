@@ -32,7 +32,7 @@ public class SensorService : ISensorService
         public async Task<SensorDTO> CreateSensorAsync(SensorCreateDTO sensorCreateDto)
         {
             var sensor = _mapper.Map<SENSOR>(sensorCreateDto);
-            sensor.SENSORID = Guid.NewGuid();
+            sensor.Id = Guid.NewGuid();
             //sensor.PasswordHash = HashPassword(sensorCreateDto.Password);
             sensor.CreatedOn = DateTime.UtcNow;
             sensor.IsActive = true;

@@ -1,12 +1,84 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ICAR.Scanner.Models.DTOs;
+using ICAR.Scanner.Services.Services.SENSORTYPEService;
+using ICAR.Scanner.DataAccess.Models;
 
 namespace ICAR.Scanner.WebApi.Controllers
 {
-    public class SENSORTYPEController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SENSORTYPEController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly ISENSORTYPEService _SENSORTYPEervice;
+
+        public SENSORTYPEController(ISENSORTYPEService SENSORTYPEervice)
         {
-            return View();
+            _SENSORTYPEervice = SENSORTYPEervice;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SENSORTYPEDTO>>> GetAllSENSORTYPE()
+        {
+            var SENSORTYPE = await _SENSORTYPEervice.GetAllSENSORTYPEsAsync();
+            return Ok(SENSORTYPE); // SENSORTYPE should be List<SENSORTYPEDTO>
+        }
+
+        [HttpGet("custom")]
+        public async Task<ActionResult<IEnumerable<SENSORTYPEDTO>>> GetAllSENSORTYPECustom()
+        {
+            var SENSORTYPE = await _SENSORTYPEervice.GetAllSENSORTYPEsAsync();
+
+            var response = new SENSORTYPEResponse
+            {
+                Status = SENSORTYPE != null && SENSORTYPE.Any() ? "Success" : "NoData",
+                Data = SENSORTYPE?.Select(dto => new SENSORTYPEDTO
+                {
+                    // Map properties from SENSORTYPEDTO to SENSORTYPE here
+                    //SENSORTYPEId = dto.SENSORTYPEId,
+                    RoleId = dto.RoleId,
+                    PhoneNumber = dto.PhoneNumber,
+                    LastName = dto.LastName,
+                    FirstName = dto.FirstName,
+                    //SENSORTYPEname = dto.SENSORTYPEname,
+                    Email = dto.Email,
+                    AddressId = dto.AddressId
+                    //State
+
+                    // Add other properties as needed
+                }).ToList() ?? new List<SENSORTYPEDTO>()
+            };
+
+            return Ok(response);
+
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SENSORTYPEDTO>> GetSENSORTYPE(Guid id)
+        {
+            var SENSORTYPE = await _SENSORTYPEervice.GetSENSORTYPEByIdAsync(id);
+            return SENSORTYPE != null ? Ok(SENSORTYPE) : NotFound();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<SENSORTYPEDTO>> CreateSENSORTYPE(SENSORTYPECreateDTO SENSORTYPECreateDto)
+        {
+            var createdSENSORTYPE = await _SENSORTYPEervice.CreateSENSORTYPEAsync(SENSORTYPECreateDto);
+            return CreatedAtAction(nameof(GetSENSORTYPE), new { id = createdSENSORTYPE.UserId }, createdSENSORTYPE);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSENSORTYPE(Guid id, SENSORTYPEDTO SENSORTYPEDto)
+        {
+            if (id != SENSORTYPEDto.UserId) return BadRequest();
+            var result = await _SENSORTYPEervice.UpdateSENSORTYPEAsync(SENSORTYPEDto);
+            return result ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSENSORTYPE(Guid id)
+        {
+            var result = await _SENSORTYPEervice.DeleteSENSORTYPEAsync(id);
+            return result ? NoContent() : NotFound();
         }
     }
 }

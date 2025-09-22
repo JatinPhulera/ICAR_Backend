@@ -33,7 +33,7 @@ public partial class User
 
     public bool? IsLocked { get; set; }
 
-    public DateTime? LastLoginAt { get; set; }
+    public DateTime? LastAccessTime { get; set; }
 
     public DateTime CreatedOn { get; set; }
 
@@ -56,6 +56,12 @@ public partial class User
     public int? RoleID { get; set; }
 
     public int? InstitutionID { get; set; }
+
+    public string? State { get; set; }
+
+    public string? Latitude { get; set; }
+
+    public string? Longitude { get; set; }
 
     public virtual Institution? Institution { get; set; }
 

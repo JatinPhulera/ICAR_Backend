@@ -2,7 +2,7 @@ using ICAR.Scanner.Models.DTOs;
 
 namespace ICAR.Scanner.Services.Services.UserService;
 
-    public interface IUserService
+    public interface IAuditTreeService
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
         Task<UserDTO?> GetUserByIdAsync(Guid userId);

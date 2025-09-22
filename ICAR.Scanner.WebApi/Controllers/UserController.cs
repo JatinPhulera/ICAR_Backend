@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ICAR.Scanner.Models.DTOs;
 using ICAR.Scanner.Services.Services.UserService;
+using ICAR.Scanner.DataAccess.Models;
 
 namespace ICAR.Scanner.WebApi.Controllers
 {
@@ -8,9 +9,9 @@ namespace ICAR.Scanner.WebApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IAuditTreeService _userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IAuditTreeService userService)
         {
             _userService = userService;
         }
@@ -20,6 +21,35 @@ namespace ICAR.Scanner.WebApi.Controllers
         {
             var users = await _userService.GetAllUsersAsync();
             return Ok(users); // users should be List<UserDTO>
+        }
+
+        [HttpGet("custom")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUserCustom()
+        {
+            var users = await _userService.GetAllUsersAsync();
+
+            var response = new UserResponse
+            {
+                Status = users != null && users.Any() ? "Success" : "NoData",
+                Data = users?.Select(dto => new UserDTO
+                {
+                    // Map properties from UserDTO to User here
+                    UserId = dto.UserId,
+                    RoleId = dto.RoleId,
+                    PhoneNumber = dto.PhoneNumber,
+                    LastName = dto.LastName,
+                    FirstName = dto.FirstName,
+                    Username = dto.Username,
+                    Email = dto.Email,
+                    AddressId = dto.AddressId
+                    //State
+
+                    // Add other properties as needed
+                }).ToList() ?? new List<UserDTO>()
+            };
+
+            return Ok(response);
+
         }
 
         [HttpGet("{id}")]

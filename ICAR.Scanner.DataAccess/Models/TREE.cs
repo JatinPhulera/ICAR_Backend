@@ -97,5 +97,9 @@ public partial class Tree
 
     public string? UpdatedBy { get; set; }
 
+    public virtual ICollection<AuditTree> AuditTrees { get; set; } = new List<AuditTree>();
+
+    public virtual ICollection<FileDetail> FileDetails { get; set; } = new List<FileDetail>();
+
     public virtual SENSOR? SENSOR { get; set; }
 }

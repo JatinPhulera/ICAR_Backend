@@ -5,11 +5,27 @@ namespace ICAR.Scanner.DataAccess.Models;
 
 public partial class SENSOR
 {
-    public Guid SENSORID { get; set; }
+    public Guid Id { get; set; }
 
-    public string? SENSORTYPE { get; set; }
+    public string? SensorID { get; set; }
 
-    public string? SENSORUID { get; set; }
+    public string? Type { get; set; }
+
+    public DateTime? Installation_date { get; set; }
+
+    public string? Status { get; set; }
+
+    public string? AddedBy { get; set; }
+
+    public string? CustID { get; set; }
+
+    public string? AssetID { get; set; }
+
+    public string? Accession_Number { get; set; }
+
+    public string? SensorUID { get; set; }
+
+    public string? Sensitivity { get; set; }
 
     public string? CommonName { get; set; }
 
@@ -17,17 +33,7 @@ public partial class SENSOR
 
     public string? UserName { get; set; }
 
-    public string? addedBy { get; set; }
-
-    public string? custID { get; set; }
-
-    public string? assetID { get; set; }
-
-    public string? displayID { get; set; }
-
-    public string? accession_number { get; set; }
-
-    public DateTime? expiry_date { get; set; }
+    public DateTime? Expiry_date { get; set; }
 
     public string? batteryPercentage { get; set; }
 
@@ -38,8 +44,6 @@ public partial class SENSOR
     public bool? isSensitivity { get; set; }
 
     public string? sensitivityValue { get; set; }
-
-    public DateTime? installation_date { get; set; }
 
     public bool? IsActive { get; set; }
 
@@ -53,7 +57,7 @@ public partial class SENSOR
 
     public Guid? SENSORTYPEID { get; set; }
 
-    public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
+    public virtual SENSORTYPE? SENSORTYPE { get; set; }
 
     public virtual ICollection<Tree> Trees { get; set; } = new List<Tree>();
 }

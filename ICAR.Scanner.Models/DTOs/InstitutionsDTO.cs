@@ -2,7 +2,7 @@ using System.Net;
 
 namespace ICAR.Scanner.Models.DTOs;
 
-public class UserDTO
+public class InstitutionsDTO
 {
     public Guid UserId { get; set; }
     public string Username { get; set; } = null!;
@@ -52,8 +52,8 @@ public class UserDTO
     //public virtual RoleMaster? Role { get; set; }
 }
 
-public class UserResponse
+public class InstitutionsResponse
 {
     public string Status { get; set; }
-    public List<UserDTO> Data { get; set; }
+    public List<InstitutionsDTO> Data { get; set; }
 }

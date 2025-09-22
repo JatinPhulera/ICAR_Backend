@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ICAR.Scanner.Models.DTOs;
-    public class UserCreateDTO
-    {
+    public class InstitutionsCreateDTO
+{
         [Required]
         public string Username { get; set; } = null!;
 

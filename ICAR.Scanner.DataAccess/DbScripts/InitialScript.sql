@@ -441,6 +441,158 @@ CREATE TABLE TREES
 );
 
 
+
+----updated---
+CREATE TABLE [dbo].[Tree](
+	[Id] [uniqueidentifier] NOT NULL,
+	[DisplayId] [nvarchar](255) NULL,
+	[AssetType] [nvarchar](255) NULL,
+	[Location] [nvarchar](255) NULL,
+	[Alerts] [nvarchar](255) NULL,
+	[AddedBy] [nvarchar](255) NULL,
+	[SENSORID] [uniqueidentifier] NULL,
+	[AccessionNumber] [nvarchar](255) NULL,
+	[AssetId] [nvarchar](255) NULL,
+	[RfidTagCreatedOn] [nvarchar](255) NULL,
+	[LastAuditTime] [nvarchar](255) NULL,
+	[AssetSubType] [nvarchar](255) NULL,
+	[SensorType] [nvarchar](255) NULL,
+	[OperatorId] [nvarchar](255) NULL,
+	[AddedByName] [nvarchar](255) NULL,
+	[OperatorName] [nvarchar](255) NULL,
+	[Age] [nvarchar](255) NULL,
+	[AgeUnits] [nvarchar](255) NULL,
+	[Latitude] [nvarchar](255) NULL,
+	[Longitude] [nvarchar](255) NULL,
+	[BotanicalName] [nvarchar](255) NULL,
+	[ExpiryDate] [nvarchar](255) NULL,
+	[InstallationDate] [datetime] NULL,
+	[Origin] [nvarchar](255) NULL,
+	[UniqueImportance] [nvarchar](255) NULL,
+	[Value] [nvarchar](255) NULL,
+	[AccessionOrigin] [nvarchar](255) NULL,
+	[CommonName] [nvarchar](255) NULL,
+	[ScientificName] [nvarchar](255) NULL,
+	[LastUpdated] [datetime] NULL,
+	[Status] [nvarchar](255) NULL,
+	[CultiverName] [nvarchar](255) NULL,
+	[DonorOrganization] [nvarchar](255) NULL,
+	[Importance] [nvarchar](255) NULL,
+	[PlaceOfOrigin] [nvarchar](255) NULL,
+	[PlantationYear] [nvarchar](255) NULL,
+	[OperatorFirstName] [nvarchar](255) NULL,
+	[OperatorLastName] [nvarchar](255) NULL,
+	[OperatorPhone] [nvarchar](255) NULL,
+	[OperatorState] [nvarchar](255) NULL,
+	[ImageUrl] [nvarchar](255) NULL,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,	
+CONSTRAINT PK_Id PRIMARY KEY (Id),
+CONSTRAINT FK_TREES_SENSORID FOREIGN KEY (SENSORID) REFERENCES SENSORS(Id)
+ );
+
+
+
+Go
+
+CREATE TABLE SENSORS
+(
+    Id        UNIQUEIDENTIFIER NOT NULL,
+    SensorID          NVARCHAR(255)  NULL ,
+    Type           NVARCHAR(255) NULL,	
+	Installation_date	DATETIME NULL,
+	Status           NVARCHAR(255) NULL,	
+    AddedBy           NVARCHAR(50) NULL,
+	CustID			 NVARCHAR(50) NULL,
+	AssetID			NVARCHAR(255)  NULL,
+	Accession_Number			NVARCHAR(255)  NULL,
+	SensorUID			NVARCHAR(255)  NULL,
+	Sensitivity			NVARCHAR(255)  NULL,
+	CommonName			NVARCHAR(255)  NULL,
+	AccessionNumber  	NVARCHAR(255)  NULL,
+	UserName			NVARCHAR(255)  NULL,
+	Expiry_date			DATETIME NULL,
+	batteryPercentage   NVARCHAR(255)  NULL,
+	messageType				NVARCHAR(255)  NULL,
+	isHooterOn				BIT DEFAULT 1,
+	isSensitivity	BIT DEFAULT 1,
+	sensitivityValue	 NVARCHAR(255)  NULL,
+	IsActive            BIT DEFAULT 1,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+	SENSORTYPEID		UNIQUEIDENTIFIER
+    CONSTRAINT PK_SENSORS PRIMARY KEY (Id),
+	CONSTRAINT FK_SENSORS_SENSORTYPE FOREIGN KEY (SENSORTYPEID) REFERENCES SENSORTYPE(SENSORTYPEID)
+);
+
+Go
+
+ALTER TABLE Users
+ADD [State] [nvarchar](50) NULL,
+[Latitude] [nvarchar](255) NULL,
+    [Longitude]  [nvarchar](255) NULL;
+
+    Go
+
+    CREATE TABLE [dbo].[FileDetail](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Filename] [nvarchar](255) NULL,
+	[Filetype] [nvarchar](255) NULL,
+	[FilePath] [nvarchar](max) NULL,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[TreeId] [uniqueidentifier] NOT NULL,
+CONSTRAINT PK_FileDetail_Id PRIMARY KEY (Id),
+CONSTRAINT FK_Tree_Id FOREIGN KEY (TreeId) REFERENCES Tree(Id)
+ );
+
+
+ GO
+
+ CREATE TABLE [dbo].[AuditTree](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](255) NULL,
+	[AuditId] [nvarchar](255) NULL,
+	[AuditDate] DATETIME NOT NULL DEFAULT GETDATE(),
+	[Girth] [nvarchar](255) NULL,
+	[Height] [nvarchar](255) NULL,
+	[Disease] [nvarchar](255) NULL,
+	[Pest] [nvarchar](255) NULL,
+	[PhysicalDamage] [nvarchar](255) NULL,
+	[Remarks] [nvarchar](255) NULL,
+	[AddedBy] [nvarchar](255) NULL,
+	[LastUpdate] DATETIME NULL,
+	[State] [nvarchar](255) NULL,
+	[Level] [nvarchar](255) NULL,
+	[V] [nvarchar](255) NULL,
+	[ReviewedBy] [nvarchar](255) NULL,
+	[ReviewedOn] DATETIME NULL,
+	[AccessionNumber] [nvarchar](255) NULL,
+	[Deletable] BIT DEFAULT 1,
+	[Editable] BIT DEFAULT 1,
+	[Acceptable] BIT DEFAULT 1,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[TreeId] [uniqueidentifier] NOT NULL,
+CONSTRAINT PK_AuditTree_Id PRIMARY KEY (Id),
+CONSTRAINT FK_AuditTree_Id FOREIGN KEY (TreeId) REFERENCES Tree(Id)
+ );
+
+
+
+
+
 ---
 
 -- SELECT * FROM Countries

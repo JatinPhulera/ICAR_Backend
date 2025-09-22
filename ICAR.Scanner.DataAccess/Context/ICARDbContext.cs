@@ -14,7 +14,11 @@ public partial class ICARDbContext : DbContext
 
     public virtual DbSet<Address> Addresses { get; set; }
 
+    public virtual DbSet<AuditTree> AuditTrees { get; set; }
+
     public virtual DbSet<Country> Countries { get; set; }
+
+    public virtual DbSet<FileDetail> FileDetails { get; set; }
 
     public virtual DbSet<Institution> Institutions { get; set; }
 
@@ -54,6 +58,49 @@ public partial class ICARDbContext : DbContext
                 .HasConstraintName("FK_Addresses_States");
         });
 
+        modelBuilder.Entity<AuditTree>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_AuditTree_Id");
+
+            entity.ToTable("AuditTree");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Acceptable).HasDefaultValue(true);
+            entity.Property(e => e.AccessionNumber).HasMaxLength(255);
+            entity.Property(e => e.AddedBy).HasMaxLength(255);
+            entity.Property(e => e.AuditDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.AuditId).HasMaxLength(255);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Deletable).HasDefaultValue(true);
+            entity.Property(e => e.Disease).HasMaxLength(255);
+            entity.Property(e => e.Editable).HasDefaultValue(true);
+            entity.Property(e => e.Girth).HasMaxLength(255);
+            entity.Property(e => e.Height).HasMaxLength(255);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.LastUpdate).HasColumnType("datetime");
+            entity.Property(e => e.Level).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.Pest).HasMaxLength(255);
+            entity.Property(e => e.PhysicalDamage).HasMaxLength(255);
+            entity.Property(e => e.Remarks).HasMaxLength(255);
+            entity.Property(e => e.ReviewedBy).HasMaxLength(255);
+            entity.Property(e => e.ReviewedOn).HasColumnType("datetime");
+            entity.Property(e => e.State).HasMaxLength(255);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.V).HasMaxLength(255);
+
+            entity.HasOne(d => d.Tree).WithMany(p => p.AuditTrees)
+                .HasForeignKey(d => d.TreeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AuditTree_Id");
+        });
+
         modelBuilder.Entity<Country>(entity =>
         {
             entity.HasIndex(e => e.CountryCode, "UQ__Countrie__5D9B0D2C16F29CB1").IsUnique();
@@ -63,6 +110,29 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.CountryCode).HasMaxLength(10);
             entity.Property(e => e.CountryName).HasMaxLength(100);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+        });
+
+        modelBuilder.Entity<FileDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_FileDetail_Id");
+
+            entity.ToTable("FileDetail");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Filename).HasMaxLength(255);
+            entity.Property(e => e.Filetype).HasMaxLength(255);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Tree).WithMany(p => p.FileDetails)
+                .HasForeignKey(d => d.TreeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Tree_Id");
         });
 
         modelBuilder.Entity<Institution>(entity =>
@@ -107,32 +177,35 @@ public partial class ICARDbContext : DbContext
         {
             entity.ToTable("SENSORS");
 
-            entity.Property(e => e.SENSORID).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccessionNumber).HasMaxLength(255);
+            entity.Property(e => e.Accession_Number).HasMaxLength(255);
+            entity.Property(e => e.AddedBy).HasMaxLength(50);
+            entity.Property(e => e.AssetID).HasMaxLength(255);
             entity.Property(e => e.CommonName).HasMaxLength(255);
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.CustID).HasMaxLength(50);
+            entity.Property(e => e.Expiry_date).HasColumnType("datetime");
+            entity.Property(e => e.Installation_date).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
-            entity.Property(e => e.SENSORTYPE).HasMaxLength(255);
+            entity.Property(e => e.Sensitivity).HasMaxLength(255);
+            entity.Property(e => e.SensorID).HasMaxLength(255);
+            entity.Property(e => e.SensorUID).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
+            entity.Property(e => e.Type).HasMaxLength(255);
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(255);
-            entity.Property(e => e.accession_number).HasMaxLength(255);
-            entity.Property(e => e.addedBy).HasMaxLength(255);
-            entity.Property(e => e.assetID).HasMaxLength(255);
             entity.Property(e => e.batteryPercentage).HasMaxLength(255);
-            entity.Property(e => e.custID).HasMaxLength(255);
-            entity.Property(e => e.displayID).HasMaxLength(255);
-            entity.Property(e => e.expiry_date).HasColumnType("datetime");
-            entity.Property(e => e.installation_date).HasColumnType("datetime");
             entity.Property(e => e.isHooterOn).HasDefaultValue(true);
             entity.Property(e => e.isSensitivity).HasDefaultValue(true);
             entity.Property(e => e.messageType).HasMaxLength(255);
             entity.Property(e => e.sensitivityValue).HasMaxLength(255);
 
-            entity.HasOne(d => d.SENSORTYPENavigation).WithMany(p => p.SENSORs)
+            entity.HasOne(d => d.SENSORTYPE).WithMany(p => p.SENSORs)
                 .HasForeignKey(d => d.SENSORTYPEID)
                 .HasConstraintName("FK_SENSORS_SENSORTYPE");
         });
@@ -236,7 +309,7 @@ public partial class ICARDbContext : DbContext
 
             entity.HasOne(d => d.SENSOR).WithMany(p => p.Trees)
                 .HasForeignKey(d => d.SENSORID)
-                .HasConstraintName("FK_Tree_SENSORID");
+                .HasConstraintName("FK_TREES_SENSORID");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -255,8 +328,10 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.IsEmailVerified).HasDefaultValue(false);
             entity.Property(e => e.IsLocked).HasDefaultValue(false);
-            entity.Property(e => e.LastLoginAt).HasColumnType("datetime");
+            entity.Property(e => e.LastAccessTime).HasColumnType("datetime");
             entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.Latitude).HasMaxLength(255);
+            entity.Property(e => e.Longitude).HasMaxLength(255);
             entity.Property(e => e.MfaEnabled).HasDefaultValue(false);
             entity.Property(e => e.MfaSecret).HasMaxLength(255);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
@@ -264,6 +339,7 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.ProfilePictureUrl).HasMaxLength(255);
             entity.Property(e => e.ResetToken).HasMaxLength(255);
             entity.Property(e => e.ResetTokenExpiry).HasColumnType("datetime");
+            entity.Property(e => e.State).HasMaxLength(50);
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.Username).HasMaxLength(50);
