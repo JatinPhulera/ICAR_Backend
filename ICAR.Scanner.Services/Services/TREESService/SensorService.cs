@@ -44,7 +44,7 @@ public class SensorService : ISensorService
 
         public async Task<bool> UpdateSensorAsync(SensorDTO sensorDto)
         {
-            var sesnsor = await _sensorRepository.GetByIdAsync(sensorDto.SensorId);
+            var sesnsor = await _sensorRepository.GetByIdAsync(sensorDto.Id);
             if (sesnsor == null) return false;
 
             _mapper.Map(sensorDto, sesnsor); // Map updated fields from DTO to entity

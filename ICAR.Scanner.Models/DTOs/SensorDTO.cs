@@ -4,11 +4,27 @@ namespace ICAR.Scanner.Models.DTOs;
 
 public class SensorDTO
 {
-    public Guid SensorId { get; set; }
+    public Guid Id { get; set; }
 
-    public string? SensorType { get; set; }
+    public string? SensorID { get; set; }
 
-    public string? SensorUid { get; set; }
+    public string? Type { get; set; }
+
+    public DateTime? Installation_date { get; set; }
+
+    public string? Status { get; set; }
+
+    public string? AddedBy { get; set; }
+
+    public string? CustID { get; set; }
+
+    public string? AssetID { get; set; }
+
+    public string? Accession_Number { get; set; }
+
+    public string? SensorUID { get; set; }
+
+    public string? Sensitivity { get; set; }
 
     public string? CommonName { get; set; }
 
@@ -16,29 +32,17 @@ public class SensorDTO
 
     public string? UserName { get; set; }
 
-    public string? AddedBy { get; set; }
+    public DateTime? Expiry_date { get; set; }
 
-    public string? CustId { get; set; }
+    public string? batteryPercentage { get; set; }
 
-    public string? AssetId { get; set; }
+    public string? messageType { get; set; }
 
-    public string? DisplayId { get; set; }
+    public bool? isHooterOn { get; set; }
 
-    public string? AccessionNumberAlt { get; set; }
+    public bool? isSensitivity { get; set; }
 
-    public DateTime? ExpiryDate { get; set; }
-
-    public string? BatteryPercentage { get; set; }
-
-    public string? MessageType { get; set; }
-
-    public bool? IsHooterOn { get; set; }
-
-    public bool? IsSensitivity { get; set; }
-
-    public string? SensitivityValue { get; set; }
-
-    public DateTime? InstallationDate { get; set; }
+    public string? sensitivityValue { get; set; }
 
     public bool? IsActive { get; set; }
 
@@ -52,7 +56,7 @@ public class SensorDTO
 
     public Guid? SENSORTYPEID { get; set; }
 
-   // public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
+    // public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
 
     //public virtual ICollection<TREE> TREEs { get; set; } = new List<TREE>();
 }
