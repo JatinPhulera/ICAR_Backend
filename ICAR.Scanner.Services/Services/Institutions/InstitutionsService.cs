@@ -43,7 +43,7 @@ public class AuditTreeService : IInstitutionsService
 
         public async Task<bool> UpdateInstitutionsAsync(InstitutionsDTO InstitutionsDto)
         {
-            var Institutions = await _InstitutionsRepository.GetByIdAsync(InstitutionsDto.UserId);
+            var Institutions = await _InstitutionsRepository.GetByIdAsync(InstitutionsDto.InstitutionID);
             if (Institutions == null) return false;
 
             _mapper.Map(InstitutionsDto, Institutions); // Map updated fields from DTO to entity

@@ -34,14 +34,16 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Data = FileDetail?.Select(dto => new FileDetailDTO
                 {
                     // Map properties from FileDetailDTO to FileDetail here
-                   // FileDetailId = dto.FileDetailId,
-                    RoleId = dto.RoleId,
-                    PhoneNumber = dto.PhoneNumber,
-                    LastName = dto.LastName,
-                    FirstName = dto.FirstName,
-                    //FileDetailname = dto.FileDetailname,
-                    Email = dto.Email,
-                    AddressId = dto.AddressId
+                    Id = dto.Id,
+                    Filename = dto.Filename,
+                    Filetype = dto.Filetype,
+                    FilePath = dto.FilePath,
+                    IsActive = dto.IsActive,
+                    CreatedOn = dto.CreatedOn,
+                    UpdatedOn = dto.UpdatedOn,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedBy = dto.UpdatedBy,
+                    TreeId = dto.TreeId
                     //State
 
                     // Add other properties as needed
@@ -63,13 +65,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<FileDetailDTO>> CreateFileDetail(FileDetailCreateDTO FileDetailCreateDto)
         {
             var createdFileDetail = await _FileDetailervice.CreateFileDetailAsync(FileDetailCreateDto);
-            return CreatedAtAction(nameof(GetFileDetail), new { id = createdFileDetail.UserId }, createdFileDetail);
+            return CreatedAtAction(nameof(GetFileDetail), new { id = createdFileDetail.Id }, createdFileDetail);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFileDetail(Guid id, FileDetailDTO FileDetailDto)
         {
-            if (id != FileDetailDto.UserId) return BadRequest();
+            if (id != FileDetailDto.Id) return BadRequest();
             var result = await _FileDetailervice.UpdateFileDetailAsync(FileDetailDto);
             return result ? NoContent() : NotFound();
         }

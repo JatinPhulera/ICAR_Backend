@@ -35,14 +35,13 @@ namespace ICAR.Scanner.WebApi.Controllers
                 {
                     // Map properties from AuditTreeDTO to AuditTree here
                     //AuditTreeId = dto.AuditTreeId,
-                    RoleId = dto.RoleId,
-                    PhoneNumber = dto.PhoneNumber,
-                    LastName = dto.LastName,
-                    FirstName = dto.FirstName,
-                    //AuditTreename = dto.AuditTreename,
-                    Email = dto.Email,
-                    AddressId = dto.AddressId
-                    //State
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    AuditId = dto.AuditId,
+                    AuditDate = dto.AuditDate,
+                    LastUpdate = dto.LastUpdate,
+                    AccessionNumber = dto.AccessionNumber,
+                    TreeId = dto.TreeId
 
                     // Add other properties as needed
                 }).ToList() ?? new List<AuditTreeDTO>()
@@ -63,13 +62,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<AuditTreeDTO>> CreateAuditTree(AuditTreeCreateDTO AuditTreeCreateDto)
         {
             var createdAuditTree = await _AuditTreeervice.CreateAuditTreeAsync(AuditTreeCreateDto);
-            return CreatedAtAction(nameof(GetAuditTree), new { id = createdAuditTree.UserId }, createdAuditTree);
+            return CreatedAtAction(nameof(GetAuditTree), new { id = createdAuditTree.Id }, createdAuditTree);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAuditTree(Guid id, AuditTreeDTO AuditTreeDto)
         {
-            if (id != AuditTreeDto.UserId) return BadRequest();
+            if (id != AuditTreeDto.Id) return BadRequest();
             var result = await _AuditTreeervice.UpdateAuditTreeAsync(AuditTreeDto);
             return result ? NoContent() : NotFound();
         }

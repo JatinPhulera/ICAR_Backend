@@ -3,30 +3,19 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class SENSORTYPECreateDTO
 {
-        [Required]
-        public string Username { get; set; } = null!;
+    public Guid SENSORTYPEID { get; set; }
 
-        [Required, EmailAddress]
-        public string Email { get; set; } = null!;
+    public string SENSORTYPE1 { get; set; } = null!;
 
-        [Required]
-        public string Password { get; set; } = null!;
+    public string? SENSORUID { get; set; } = null!;
 
-        [Required]
-         public string? PhoneNumber { get; set; } = null!;
+    public DateTime CreatedOn { get; set; } 
 
-        [Required]
-        public int? RoleID { get; set; } = null!;
+    public DateTime? UpdatedOn { get; set; } = null!;
 
-        public string? FirstName { get; set; } = null!;
+    public string? CreatedBy { get; set; } = null!;
 
-        public string? LastName { get; set; } = null!;
-        public string? Address { get; set; } = null!;
-        public bool? IsActive { get; set; } = null!;
-        public DateTime? LastLoginAt { get; set; } = null!;
-        public string AdminID { get; set; } = null!;
-        public string State { get; set; } = null!;
-        public string LastAccessTime { get; set; } = null!;
-        public string Latitude { get; set; } = null!;
-        public string Longitude { get; set; } = null!;
+    public string? UpdatedBy { get; set; } = null!;
+
+    //public virtual ICollection<SENSOR> SENSORs { get; set; } = new List<SENSOR>();
 }

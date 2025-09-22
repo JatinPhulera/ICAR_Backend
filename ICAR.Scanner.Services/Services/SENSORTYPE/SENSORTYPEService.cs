@@ -43,7 +43,7 @@ public class SENSORTYPEService : ISENSORTYPEService
 
         public async Task<bool> UpdateSENSORTYPEAsync(SENSORTYPEDTO SENSORTYPEDto)
         {
-            var SENSORTYPE = await _SENSORTYPERepository.GetByIdAsync(SENSORTYPEDto.UserId);
+            var SENSORTYPE = await _SENSORTYPERepository.GetByIdAsync(SENSORTYPEDto.SENSORTYPEID);
             if (SENSORTYPE == null) return false;
 
             _mapper.Map(SENSORTYPEDto, SENSORTYPE); // Map updated fields from DTO to entity

@@ -43,7 +43,7 @@ public class AuditTreeService : IAuditTreeService
 
         public async Task<bool> UpdateAuditTreeAsync(AuditTreeDTO AuditTreeDto)
         {
-            var AuditTree = await _AuditTreeRepository.GetByIdAsync(AuditTreeDto.UserId);
+            var AuditTree = await _AuditTreeRepository.GetByIdAsync(AuditTreeDto.Id);
             if (AuditTree == null) return false;
 
             _mapper.Map(AuditTreeDto, AuditTree); // Map updated fields from DTO to entity

@@ -26,7 +26,7 @@ namespace ICAR.Scanner.Models.DTOs;
         public DateTime? LastLoginAt { get; set; } = null!;
         public string AdminID { get; set; } = null!;
         public string State { get; set; } = null!;
-        public string LastAccessTime { get; set; } = null!;
+        public DateTime LastAccessTime { get; set; } 
         public string Latitude { get; set; } = null!;
         public string Longitude { get; set; } = null!;
 }

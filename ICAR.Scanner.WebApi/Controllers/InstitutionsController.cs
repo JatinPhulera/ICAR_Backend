@@ -35,13 +35,15 @@ namespace ICAR.Scanner.WebApi.Controllers
                 {
                     // Map properties from InstitutionsDTO to Institutions here
                     //InstitutionsId = dto.InstitutionsId,
-                    RoleId = dto.RoleId,
-                    PhoneNumber = dto.PhoneNumber,
-                    LastName = dto.LastName,
-                    FirstName = dto.FirstName,
-                    //Institutionsname = dto.Institutionsname,
-                    Email = dto.Email,
-                    AddressId = dto.AddressId
+                    InstitutionID = dto.InstitutionID,
+                    InstitutionName = dto.InstitutionName,
+                    InstitutionHead = dto.InstitutionHead,
+                    InstitutionAdress = dto.InstitutionAdress,
+                    Status = dto.Status,
+                    CreatedOn = dto.CreatedOn,
+                    UpdatedOn = dto.UpdatedOn,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedBy = dto.UpdatedBy
                     //State
 
                     // Add other properties as needed
@@ -63,13 +65,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<InstitutionsDTO>> CreateInstitutions(InstitutionsCreateDTO InstitutionsCreateDto)
         {
             var createdInstitutions = await _Institutionservice.CreateInstitutionsAsync(InstitutionsCreateDto);
-            return CreatedAtAction(nameof(GetInstitutions), new { id = createdInstitutions.UserId }, createdInstitutions);
+            return CreatedAtAction(nameof(GetInstitutions), new { id = createdInstitutions.InstitutionID }, createdInstitutions);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateInstitutions(Guid id, InstitutionsDTO InstitutionsDto)
         {
-            if (id != InstitutionsDto.UserId) return BadRequest();
+            if (id != InstitutionsDto.InstitutionID) return BadRequest();
             var result = await _Institutionservice.UpdateInstitutionsAsync(InstitutionsDto);
             return result ? NoContent() : NotFound();
         }

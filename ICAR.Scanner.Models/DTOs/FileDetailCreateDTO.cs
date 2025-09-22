@@ -3,30 +3,23 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class FileDetailCreateDTO
 {
-        [Required]
-        public string Username { get; set; } = null!;
+    public Guid Id { get; set; }
 
-        [Required, EmailAddress]
-        public string Email { get; set; } = null!;
+    public string? Filename { get; set; } = null!;
 
-        [Required]
-        public string Password { get; set; } = null!;
+    public string? Filetype { get; set; } = null!;
 
-        [Required]
-         public string? PhoneNumber { get; set; } = null!;
+    public string? FilePath { get; set; } = null!;
 
-        [Required]
-        public int? RoleID { get; set; } = null!;
+    public bool? IsActive { get; set; } = null!;
 
-        public string? FirstName { get; set; } = null!;
+    public DateTime CreatedOn { get; set; }
 
-        public string? LastName { get; set; } = null!;
-        public string? Address { get; set; } = null!;
-        public bool? IsActive { get; set; } = null!;
-        public DateTime? LastLoginAt { get; set; } = null!;
-        public string AdminID { get; set; } = null!;
-        public string State { get; set; } = null!;
-        public string LastAccessTime { get; set; } = null!;
-        public string Latitude { get; set; } = null!;
-        public string Longitude { get; set; } = null!;
+    public DateTime? UpdatedOn { get; set; }
+
+    public string? CreatedBy { get; set; } = null!;
+
+    public string? UpdatedBy { get; set; } = null!;
+
+    public Guid TreeId { get; set; }
 }

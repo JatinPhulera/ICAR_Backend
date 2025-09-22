@@ -35,13 +35,13 @@ namespace ICAR.Scanner.WebApi.Controllers
                 {
                     // Map properties from SENSORTYPEDTO to SENSORTYPE here
                     //SENSORTYPEId = dto.SENSORTYPEId,
-                    RoleId = dto.RoleId,
-                    PhoneNumber = dto.PhoneNumber,
-                    LastName = dto.LastName,
-                    FirstName = dto.FirstName,
-                    //SENSORTYPEname = dto.SENSORTYPEname,
-                    Email = dto.Email,
-                    AddressId = dto.AddressId
+                    SENSORTYPEID = dto.SENSORTYPEID,
+                    SENSORTYPE1 = dto.SENSORTYPE1,
+                    SENSORUID = dto.SENSORUID,
+                    CreatedOn = dto.CreatedOn,
+                    UpdatedOn = dto.UpdatedOn,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedBy = dto.UpdatedBy
                     //State
 
                     // Add other properties as needed
@@ -63,13 +63,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<SENSORTYPEDTO>> CreateSENSORTYPE(SENSORTYPECreateDTO SENSORTYPECreateDto)
         {
             var createdSENSORTYPE = await _SENSORTYPEervice.CreateSENSORTYPEAsync(SENSORTYPECreateDto);
-            return CreatedAtAction(nameof(GetSENSORTYPE), new { id = createdSENSORTYPE.UserId }, createdSENSORTYPE);
+            return CreatedAtAction(nameof(GetSENSORTYPE), new { id = createdSENSORTYPE.SENSORTYPEID }, createdSENSORTYPE);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSENSORTYPE(Guid id, SENSORTYPEDTO SENSORTYPEDto)
         {
-            if (id != SENSORTYPEDto.UserId) return BadRequest();
+            if (id != SENSORTYPEDto.SENSORTYPEID) return BadRequest();
             var result = await _SENSORTYPEervice.UpdateSENSORTYPEAsync(SENSORTYPEDto);
             return result ? NoContent() : NotFound();
         }

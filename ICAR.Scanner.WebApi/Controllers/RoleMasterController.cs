@@ -35,13 +35,13 @@ namespace ICAR.Scanner.WebApi.Controllers
                 {
                     // Map properties from RoleMasterDTO to RoleMaster here
                     //RoleMasterId = dto.RoleMasterId,
-                    RoleId = dto.RoleId,
-                    PhoneNumber = dto.PhoneNumber,
-                    LastName = dto.LastName,
-                    FirstName = dto.FirstName,
-                    //RoleMastername = dto.RoleMastername,
-                    Email = dto.Email,
-                    AddressId = dto.AddressId
+                    RoleID = dto.RoleID,
+                    Name = dto.Name,
+                    Status = dto.Status,
+                    CreatedOn = dto.CreatedOn,
+                    UpdatedOn = dto.UpdatedOn,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedBy = dto.UpdatedBy
                     //State
 
                     // Add other properties as needed
@@ -63,13 +63,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<RoleMasterDTO>> CreateRoleMaster(RoleMasterCreateDTO RoleMasterCreateDto)
         {
             var createdRoleMaster = await _RoleMasterervice.CreateRoleMasterAsync(RoleMasterCreateDto);
-            return CreatedAtAction(nameof(GetRoleMaster), new { id = createdRoleMaster.UserId }, createdRoleMaster);
+            return CreatedAtAction(nameof(GetRoleMaster), new { id = createdRoleMaster.RoleID }, createdRoleMaster);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRoleMaster(Guid id, RoleMasterDTO RoleMasterDto)
         {
-            if (id != RoleMasterDto.UserId) return BadRequest();
+            if (id != RoleMasterDto.RoleID) return BadRequest();
             var result = await _RoleMasterervice.UpdateRoleMasterAsync(RoleMasterDto);
             return result ? NoContent() : NotFound();
         }

@@ -43,7 +43,7 @@ public class RoleMasterService : IRoleMasterService
 
         public async Task<bool> UpdateRoleMasterAsync(RoleMasterDTO RoleMasterDto)
         {
-            var RoleMaster = await _RoleMasterRepository.GetByIdAsync(RoleMasterDto.UserId);
+            var RoleMaster = await _RoleMasterRepository.GetByIdAsync(RoleMasterDto.RoleID);
             if (RoleMaster == null) return false;
 
             _mapper.Map(RoleMasterDto, RoleMaster); // Map updated fields from DTO to entity

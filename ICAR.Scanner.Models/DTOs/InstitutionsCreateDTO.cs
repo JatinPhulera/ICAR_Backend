@@ -3,30 +3,13 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class InstitutionsCreateDTO
 {
-        [Required]
-        public string Username { get; set; } = null!;
-
-        [Required, EmailAddress]
-        public string Email { get; set; } = null!;
-
-        [Required]
-        public string Password { get; set; } = null!;
-
-        [Required]
-         public string? PhoneNumber { get; set; } = null!;
-
-        [Required]
-        public int? RoleID { get; set; } = null!;
-
-        public string? FirstName { get; set; } = null!;
-
-        public string? LastName { get; set; } = null!;
-        public string? Address { get; set; } = null!;
-        public bool? IsActive { get; set; } = null!;
-        public DateTime? LastLoginAt { get; set; } = null!;
-        public string AdminID { get; set; } = null!;
-        public string State { get; set; } = null!;
-        public string LastAccessTime { get; set; } = null!;
-        public string Latitude { get; set; } = null!;
-        public string Longitude { get; set; } = null!;
+    public int InstitutionID { get; set; }
+    public string InstitutionName { get; set; } = null!;
+    public string? InstitutionHead { get; set; } = null!;
+    public string? InstitutionAdress { get; set; } = null!;
+    public bool? Status { get; set; } = null!;
+    public DateOnly? CreatedOn { get; set; } = null!;
+    public DateOnly? UpdatedOn { get; set; } = null!;
+    public string? CreatedBy { get; set; } = null!;
+    public string? UpdatedBy { get; set; } = null!;
 }

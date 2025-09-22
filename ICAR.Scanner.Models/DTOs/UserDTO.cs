@@ -44,8 +44,11 @@ public class UserDTO
     public int? RoleId { get; set; }
 
     public int? InstitutionId { get; set; }
+    public DateTime LastAccessTime { get; set; } 
+    public string Latitude { get; set; } 
+    public string Longitude { get; set; } 
 
-   // public virtual Address? Address { get; set; }
+    // public virtual Address? Address { get; set; }
 
     //public virtual Institution? Institution { get; set; }
 

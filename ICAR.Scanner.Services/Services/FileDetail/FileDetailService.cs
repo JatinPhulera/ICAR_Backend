@@ -43,7 +43,7 @@ public class FileDetailService : IFileDetailService
 
         public async Task<bool> UpdateFileDetailAsync(FileDetailDTO FileDetailDto)
         {
-            var FileDetail = await _FileDetailRepository.GetByIdAsync(FileDetailDto.UserId);
+            var FileDetail = await _FileDetailRepository.GetByIdAsync(FileDetailDto.Id);
             if (FileDetail == null) return false;
 
             _mapper.Map(FileDetailDto, FileDetail); // Map updated fields from DTO to entity

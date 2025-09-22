@@ -3,30 +3,61 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class AuditTreeCreateDTO
 {
-        [Required]
-        public string Username { get; set; } = null!;
 
-        [Required, EmailAddress]
-        public string Email { get; set; } = null!;
+    public Guid Id { get; set; }
 
-        [Required]
-        public string Password { get; set; } = null!;
+    [Required]
+    public string? Name { get; set; } = null!;
 
-        [Required]
-         public string? PhoneNumber { get; set; } = null!;
+    public string? AuditId { get; set; } = null!;
 
-        [Required]
-        public int? RoleID { get; set; } = null!;
+    public DateTime AuditDate { get; set; }
 
-        public string? FirstName { get; set; } = null!;
+    public string? Girth { get; set; } = null!;
 
-        public string? LastName { get; set; } = null!;
-        public string? Address { get; set; } = null!;
-        public bool? IsActive { get; set; } = null!;
-        public DateTime? LastLoginAt { get; set; } = null!;
-        public string AdminID { get; set; } = null!;
-        public string State { get; set; } = null!;
-        public string LastAccessTime { get; set; } = null!;
-        public string Latitude { get; set; } = null!;
-        public string Longitude { get; set; } = null!;
+    public string? Height { get; set; } = null!;
+
+    public string? Disease { get; set; } = null!;
+
+    public string? Pest { get; set; } = null!;
+
+    public string? PhysicalDamage { get; set; } = null!;
+
+    public string? Remarks { get; set; } = null!;
+
+    public string? AddedBy { get; set; } = null!;
+
+    public DateTime? LastUpdate { get; set; } = null!;
+
+    public string? State { get; set; } = null!;
+
+    public string? Level { get; set; } = null!;
+
+    public string? V { get; set; } = null!;
+
+    public string? ReviewedBy { get; set; } = null!;
+
+    public DateTime? ReviewedOn { get; set; } = null!;
+
+    public string? AccessionNumber { get; set; } = null!;
+
+    public bool? Deletable { get; set; } = null!;
+
+    public bool? Editable { get; set; } = null!;
+
+    public bool? Acceptable { get; set; } = null!;
+
+    public bool? IsActive { get; set; } = null!;
+
+    public DateTime CreatedOn { get; set; } 
+
+    public DateTime? UpdatedOn { get; set; }
+
+    public string? CreatedBy { get; set; } = null!;
+
+    public string? UpdatedBy { get; set; } = null!;
+
+    public Guid TreeId { get; set; } 
+
+    //public virtual Tree Tree { get; set; } = null!;
 }

@@ -4,22 +4,49 @@ namespace ICAR.Scanner.Models.DTOs;
 
 public class AuditTreeDTO
 {
-    public Guid UserId { get; set; }
-    public string Username { get; set; } = null!;
-    public string Email { get; set; } = null!;
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public DateOnly? DateOfBirth { get; set; }
+    public Guid Id { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public string? Name { get; set; }
 
-    public bool? IsEmailVerified { get; set; }
+    public string? AuditId { get; set; }
+
+    public DateTime AuditDate { get; set; }
+
+    public string? Girth { get; set; }
+
+    public string? Height { get; set; }
+
+    public string? Disease { get; set; }
+
+    public string? Pest { get; set; }
+
+    public string? PhysicalDamage { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public string? AddedBy { get; set; }
+
+    public DateTime? LastUpdate { get; set; }
+
+    public string? State { get; set; }
+
+    public string? Level { get; set; }
+
+    public string? V { get; set; }
+
+    public string? ReviewedBy { get; set; }
+
+    public DateTime? ReviewedOn { get; set; }
+
+    public string? AccessionNumber { get; set; }
+
+    public bool? Deletable { get; set; }
+
+    public bool? Editable { get; set; }
+
+    public bool? Acceptable { get; set; }
 
     public bool? IsActive { get; set; }
-
-    public bool? IsLocked { get; set; }
-
-    public DateTime? LastLoginAt { get; set; }
 
     public DateTime CreatedOn { get; set; }
 
@@ -29,27 +56,9 @@ public class AuditTreeDTO
 
     public string? UpdatedBy { get; set; }
 
-    public string? ResetToken { get; set; }
+    public Guid TreeId { get; set; }
 
-    public DateTime? ResetTokenExpiry { get; set; }
-
-    public bool? MfaEnabled { get; set; }
-
-    public string? MfaSecret { get; set; }
-
-    public string? ProfilePictureUrl { get; set; }
-
-    public Guid? AddressId { get; set; }
-
-    public int? RoleId { get; set; }
-
-    public int? InstitutionId { get; set; }
-
-   // public virtual Address? Address { get; set; }
-
-    //public virtual Institution? Institution { get; set; }
-
-    //public virtual RoleMaster? Role { get; set; }
+    //public virtual Tree Tree { get; set; } = null!;
 }
 
 public class AuditTreeResponse

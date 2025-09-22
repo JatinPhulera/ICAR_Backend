@@ -41,7 +41,10 @@ namespace ICAR.Scanner.WebApi.Controllers
                     FirstName = dto.FirstName,
                     Username = dto.Username,
                     Email = dto.Email,
-                    AddressId = dto.AddressId
+                    AddressId = dto.AddressId,
+                    LastAccessTime=dto.LastAccessTime,
+                    Latitude=dto.Latitude,
+                    Longitude = dto.Longitude
                     //State
 
                     // Add other properties as needed
