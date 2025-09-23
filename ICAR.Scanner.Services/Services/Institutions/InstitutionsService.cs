@@ -5,12 +5,12 @@ using AutoMapper;
 
 namespace ICAR.Scanner.Services.Services.InstitutionsService;
 
-public class AuditTreeService : IInstitutionsService
+public class InstitutionsService : IInstitutionsService
 {
         private readonly IRepository<Institutions> _InstitutionsRepository;
         private readonly IMapper _mapper;
 
-        public AuditTreeService(IRepository<Institutions> InstitutionsRepository, IMapper mapper)
+        public InstitutionsService(IRepository<Institutions> InstitutionsRepository, IMapper mapper)
         {
             _InstitutionsRepository = InstitutionsRepository;
             _mapper = mapper;
