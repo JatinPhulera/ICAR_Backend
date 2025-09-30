@@ -17,15 +17,15 @@ public class SensorService : ISensorService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SensorDTO>> GetAllSensorsAsync()
+        public async Task<IEnumerable<SENSOR>> GetAllSensorsAsync()
         {
-            var users = await _sensorRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<SensorDTO>>(users);
+            var sensors = await _sensorRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<SENSOR>>(sensors);
         }
 
-        public async Task<SensorDTO?> GetSensorByIdAsync(Guid userId)
+        public async Task<SensorDTO?> GetSensorByIdAsync(Guid sensorID)
         {
-            var sensor = await _sensorRepository.GetByIdAsync(userId);
+            var sensor = await _sensorRepository.GetByIdAsync(sensorID);
             return sensor == null ? null : _mapper.Map<SensorDTO>(sensor);
         }
 

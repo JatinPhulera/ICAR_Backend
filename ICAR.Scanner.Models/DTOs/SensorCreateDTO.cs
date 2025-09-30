@@ -28,8 +28,6 @@ namespace ICAR.Scanner.Models.DTOs.Request;
 
     public string? CommonName { get; set; } = null!;
 
-    public string? AccessionNumber { get; set; } = null!;
-
     public string? UserName { get; set; } = null!;
 
     public DateTime? Expiry_date { get; set; } = null!;

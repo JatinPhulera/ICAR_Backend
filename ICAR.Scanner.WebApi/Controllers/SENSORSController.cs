@@ -23,6 +23,37 @@ namespace ICAR.Scanner.WebApi.Controllers
             return Ok(sensors); 
         }
 
+        [HttpGet("custom")]
+        public async Task<ActionResult<IEnumerable<SensorDTO>>> GetAllSensorCustom()
+        {
+            var sessors = await _sensorService.GetAllSensorsAsync();
+
+            var response = new SensorResponse
+            {
+                Status = sessors != null && sessors.Any() ? "Success" : "NoData",
+                Data = sessors?.Select(dto => new SensorDTO
+                {
+                    // Map properties from UserDTO to User here
+                    Id = dto.Id,
+                    Status = dto.Status,
+                    SensorID = dto.SensorID,
+                    Type = dto.Type,
+                    CommonName = dto.CommonName,
+                    Accession_Number = dto.Accession_Number,
+                    batteryPercentage = dto.batteryPercentage,
+                    Installation_date = dto.Installation_date,
+                    CreatedOn = dto.CreatedOn,
+                    CreatedBy = dto.CreatedBy
+                    //State
+
+                    // Add other properties as needed
+                }).ToList() ?? new List<SensorDTO>()
+            };
+
+            return Ok(response);
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SensorDTO>> GetSensor(Guid id)
         {

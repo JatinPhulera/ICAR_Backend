@@ -33,15 +33,29 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Status = AuditTree != null && AuditTree.Any() ? "Success" : "NoData",
                 Data = AuditTree?.Select(dto => new AuditTreeDTO
                 {
-                    // Map properties from AuditTreeDTO to AuditTree here
-                    //AuditTreeId = dto.AuditTreeId,
                     Id = dto.Id,
                     Name = dto.Name,
+                    //ass = dto.AssetId,
+                    TreeId = dto.TreeId,
                     AuditId = dto.AuditId,
                     AuditDate = dto.AuditDate,
+                    Girth = dto.Girth,
+                    Height = dto.Height,
+                    Disease = dto.Disease,
+                    Pest = dto.Pest,
+                    PhysicalDamage = dto.PhysicalDamage,
+                    Remarks = dto.Remarks,
+                    AddedBy = dto.AddedBy,
                     LastUpdate = dto.LastUpdate,
+                    State = dto.State,
+                    Level = dto.Level,
+                    V = dto.V,
+                    ReviewedBy = dto.ReviewedBy,
+                    ReviewedOn = dto.ReviewedOn,
                     AccessionNumber = dto.AccessionNumber,
-                    TreeId = dto.TreeId
+                    Deletable = dto.Deletable,
+                    Editable = dto.Editable,
+                    Acceptable = dto.Acceptable
 
                     // Add other properties as needed
                 }).ToList() ?? new List<AuditTreeDTO>()

@@ -16,10 +16,10 @@ public class TREESService : ITREESService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TreesDto>> GetAllTreeAsync()
+        public async Task<IEnumerable<Tree>> GetAllTreeAsync()
         {
             var trees = await _treeRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<TreesDto>>(trees);
+            return _mapper.Map<IEnumerable<Tree>>(trees);
         }
 
         public async Task<TreesDto?> GetTreeByIdAsync(Guid TreeId)

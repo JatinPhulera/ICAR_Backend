@@ -96,3 +96,10 @@ public class TreesDto
 
     public Guid? SENSOR { get; set; }
 }
+
+public class TreesResponse
+{
+    public string Status { get; set; }
+    public int DataCount { get; set; }
+    public List<TreesDto> Data { get; set; }
+}

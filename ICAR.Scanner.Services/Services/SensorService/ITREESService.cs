@@ -5,7 +5,7 @@ namespace ICAR.Scanner.Services.Services.TreeService;
 
     public interface ITREESService
     {
-        Task<IEnumerable<TreesDto>> GetAllTreeAsync();
+        Task<IEnumerable<Tree>> GetAllTreeAsync();
         Task<TreesDto?> GetTreeByIdAsync(Guid TreeId);
         Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto);
         Task<bool> UpdateTreeAsync(TreesDto treeDto);

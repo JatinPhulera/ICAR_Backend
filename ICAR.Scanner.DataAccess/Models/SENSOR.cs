@@ -29,8 +29,6 @@ public partial class SENSOR
 
     public string? CommonName { get; set; }
 
-    public string? AccessionNumber { get; set; }
-
     public string? UserName { get; set; }
 
     public DateTime? Expiry_date { get; set; }

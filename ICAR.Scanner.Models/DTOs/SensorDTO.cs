@@ -28,8 +28,6 @@ public class SensorDTO
 
     public string? CommonName { get; set; }
 
-    public string? AccessionNumber { get; set; }
-
     public string? UserName { get; set; }
 
     public DateTime? Expiry_date { get; set; }
@@ -59,4 +57,10 @@ public class SensorDTO
     // public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
 
     //public virtual ICollection<TREE> TREEs { get; set; } = new List<TREE>();
+}
+
+public class SensorResponse
+{
+    public string Status { get; set; }
+    public List<SensorDTO> Data { get; set; }
 }

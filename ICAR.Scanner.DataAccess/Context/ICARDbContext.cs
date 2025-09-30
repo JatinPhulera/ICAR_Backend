@@ -180,7 +180,6 @@ public partial class ICARDbContext : DbContext
             entity.ToTable("SENSORS");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.AccessionNumber).HasMaxLength(255);
             entity.Property(e => e.Accession_Number).HasMaxLength(255);
             entity.Property(e => e.AddedBy).HasMaxLength(50);
             entity.Property(e => e.AssetID).HasMaxLength(255);

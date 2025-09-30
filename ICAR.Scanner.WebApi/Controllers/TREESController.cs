@@ -20,6 +20,50 @@ namespace ICAR.Scanner.WebApi.Controllers
             return Ok(sensors);
         }
 
+        [HttpGet("custom")]
+        public async Task<ActionResult<IEnumerable<TreesDto>>> GetAllTreeCustom()
+        {
+            var sessors = await _treeService.GetAllTreeAsync();
+
+            var response = new TreesResponse
+            {
+                Status = sessors != null && sessors.Any() ? "Success" : "NoData",
+                DataCount= sessors.ToList().Count,
+                Data = sessors?.Select(dto => new TreesDto
+                {
+                    CommonName = dto.CommonName,
+                    ScientificName = dto.ScientificName,
+                    AccessionNumber = dto.AccessionNumber,
+                    SENSORID = dto.SENSORID,
+                    Location = dto.Location,
+                    LastUpdated = dto.LastUpdated,
+                    Status = dto.Status,
+                    CultiverName = dto.CultiverName,
+                    DonorOrganization = dto.DonorOrganization,
+                    Importance = dto.Importance,
+                    PlaceOfOrigin = dto.PlaceOfOrigin,
+                    Age = dto.Age,
+                    Latitude = dto.Latitude,
+                    Longitude = dto.Longitude,
+                    PlantationYear = dto.PlantationYear,
+                    SensorType = dto.SensorType,
+                    OperatorFirstName = dto.OperatorFirstName,
+                    OperatorLastName = dto.OperatorLastName,
+                    OperatorPhone = dto.OperatorPhone,
+                    OperatorState = dto.OperatorState,
+                    ImageUrl = dto.ImageUrl,
+                    CreatedOn = dto.CreatedOn,
+                    CreatedBy = dto.CreatedBy
+                    //State
+
+                    // Add other properties as needed
+                }).ToList() ?? new List<TreesDto>()
+            };
+
+            return Ok(response);
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TreesDto>> GetTree(Guid id)
         {
