@@ -1,3 +1,4 @@
+using ICAR.Scanner.DataAccess.Models;
 using System.Net;
 
 namespace ICAR.Scanner.Models.DTOs;

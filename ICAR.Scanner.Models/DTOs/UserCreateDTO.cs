@@ -15,10 +15,11 @@ namespace ICAR.Scanner.Models.DTOs;
         [Required]
          public string? PhoneNumber { get; set; } = null!;
 
-        [Required]
-        public int? RoleID { get; set; } = null!;
+        public Guid? RoleID { get; set; }
 
-        public string? FirstName { get; set; } = null!;
+        public Guid? InstitutionID { get; set; }
+
+         public string? FirstName { get; set; } = null!;
 
         public string? LastName { get; set; } = null!;
         public string? Address { get; set; } = null!;

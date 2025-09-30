@@ -5,7 +5,7 @@ namespace ICAR.Scanner.DataAccess.Models;
 
 public partial class Institution
 {
-    public int InstitutionID { get; set; }
+    public Guid InstitutionID { get; set; }
 
     public string InstitutionName { get; set; } = null!;
 

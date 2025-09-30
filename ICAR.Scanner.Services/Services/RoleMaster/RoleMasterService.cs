@@ -16,10 +16,10 @@ public class RoleMasterService : IRoleMasterService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<RoleMasterDTO>> GetAllRoleMastersAsync()
+        public async Task<List<RoleMaster>> GetAllRoleMastersAsync()
         {
             var RoleMasters = await _RoleMasterRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<RoleMasterDTO>>(RoleMasters);
+            return _mapper.Map<List<RoleMaster>>(RoleMasters.ToList());
         }
 
         public async Task<RoleMasterDTO?> GetRoleMasterByIdAsync(Guid RoleMasterId)

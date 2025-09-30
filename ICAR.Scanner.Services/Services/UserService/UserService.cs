@@ -5,33 +5,33 @@ using AutoMapper;
 
 namespace ICAR.Scanner.Services.Services.UserService;
 
-public class AuditTreeService : IAuditTreeService
-    {
+public class UserService : IUserService
+{
         private readonly IRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
-        public AuditTreeService(IRepository<User> userRepository, IMapper mapper)
+        public UserService(IRepository<User> userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<UserDTO>>(users);
+            return _mapper.Map<IEnumerable<User>>(users);
         }
 
         public async Task<UserDTO?> GetUserByIdAsync(Guid userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            return user == null ? null : _mapper.Map<UserDTO>(user);
+        return user == null ? null : _mapper.Map<UserDTO>(user);
         }
 
         public async Task<UserDTO> CreateUserAsync(UserCreateDTO userCreateDto)
         {
             var user = _mapper.Map<User>(userCreateDto);
-            user.UserId = Guid.NewGuid();
+            user.Id = Guid.NewGuid();
             user.PasswordHash = HashPassword(userCreateDto.Password);
             user.CreatedOn = DateTime.UtcNow;
             user.IsActive = true;
@@ -43,7 +43,7 @@ public class AuditTreeService : IAuditTreeService
 
         public async Task<bool> UpdateUserAsync(UserDTO userDto)
         {
-            var user = await _userRepository.GetByIdAsync(userDto.UserId);
+            var user = await _userRepository.GetByIdAsync(userDto.Id);
             if (user == null) return false;
 
             _mapper.Map(userDto, user); // Map updated fields from DTO to entity

@@ -17,7 +17,7 @@ namespace ICAR.Scanner.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleMasterDTO>>> GetAllRoleMaster()
+        public async Task<ActionResult<List<RoleMasterDTO>>> GetAllRoleMaster()
         {
             var RoleMaster = await _RoleMasterervice.GetAllRoleMastersAsync();
             return Ok(RoleMaster); // RoleMaster should be List<RoleMasterDTO>

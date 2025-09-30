@@ -1,10 +1,11 @@
+using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.Models.DTOs;
 
 namespace ICAR.Scanner.Services.Services.InstitutionsService;
 
     public interface IInstitutionsService
 {
-        Task<IEnumerable<InstitutionsDTO>> GetAllInstitutionssAsync();
+        Task<IEnumerable<Institution>> GetAllInstitutionssAsync();
         Task<InstitutionsDTO?> GetInstitutionsByIdAsync(Guid InstitutionsId);
         Task<InstitutionsDTO> CreateInstitutionsAsync(InstitutionsCreateDTO InstitutionsCreateDto);
         Task<bool> UpdateInstitutionsAsync(InstitutionsDTO InstitutionsDto);

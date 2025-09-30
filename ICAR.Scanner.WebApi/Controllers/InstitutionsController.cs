@@ -17,7 +17,7 @@ namespace ICAR.Scanner.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InstitutionsDTO>>> GetAllInstitutions()
+        public async Task<ActionResult<IEnumerable<Institution>>> GetAllInstitutions()
         {
             var Institutions = await _Institutionservice.GetAllInstitutionssAsync();
             return Ok(Institutions); // Institutions should be List<InstitutionsDTO>

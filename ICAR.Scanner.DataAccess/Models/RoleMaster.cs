@@ -5,7 +5,7 @@ namespace ICAR.Scanner.DataAccess.Models;
 
 public partial class RoleMaster
 {
-    public int RoleID { get; set; }
+    public Guid RoleID { get; set; }
 
     public string Name { get; set; } = null!;
 

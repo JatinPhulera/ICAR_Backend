@@ -7,19 +7,19 @@ namespace ICAR.Scanner.Services.Services.InstitutionsService;
 
 public class InstitutionsService : IInstitutionsService
 {
-        private readonly IRepository<Institutions> _InstitutionsRepository;
+        private readonly IRepository<Institution> _InstitutionsRepository;
         private readonly IMapper _mapper;
 
-        public InstitutionsService(IRepository<Institutions> InstitutionsRepository, IMapper mapper)
+        public InstitutionsService(IRepository<Institution> InstitutionsRepository, IMapper mapper)
         {
             _InstitutionsRepository = InstitutionsRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<InstitutionsDTO>> GetAllInstitutionssAsync()
+        public async Task<IEnumerable<Institution>> GetAllInstitutionssAsync()
         {
             var Institutionss = await _InstitutionsRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<InstitutionsDTO>>(Institutionss);
+            return _mapper.Map<IEnumerable<Institution>>(Institutionss);
         }
 
         public async Task<InstitutionsDTO?> GetInstitutionsByIdAsync(Guid InstitutionsId)
@@ -30,7 +30,7 @@ public class InstitutionsService : IInstitutionsService
 
         public async Task<InstitutionsDTO> CreateInstitutionsAsync(InstitutionsCreateDTO InstitutionsCreateDto)
         {
-            var Institutions = _mapper.Map<Institutions>(InstitutionsCreateDto);
+            var Institutions = _mapper.Map<Institution>(InstitutionsCreateDto);
            // Institutions.InstitutionsId = Guid.NewGuid();
             //Institutions.PasswordHash = HashPassword(InstitutionsCreateDto.Password);
             //Institutions.CreatedOn = DateTime.UtcNow;

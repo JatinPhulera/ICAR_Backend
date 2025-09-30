@@ -9,9 +9,9 @@ namespace ICAR.Scanner.WebApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IAuditTreeService _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(IAuditTreeService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -34,17 +34,19 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Data = users?.Select(dto => new UserDTO
                 {
                     // Map properties from UserDTO to User here
-                    UserId = dto.UserId,
-                    RoleId = dto.RoleId,
+                    Id = dto.Id,
+                    RoleId = dto.RoleID,
+                    InstitutionId=dto.InstitutionID,
                     PhoneNumber = dto.PhoneNumber,
                     LastName = dto.LastName,
                     FirstName = dto.FirstName,
                     Username = dto.Username,
                     Email = dto.Email,
                     AddressId = dto.AddressId,
-                    LastAccessTime=dto.LastAccessTime,
+                    LastAccessTime=dto.LastLoginAt.Value,
                     Latitude=dto.Latitude,
-                    Longitude = dto.Longitude
+                    Longitude = dto.Longitude,
+                    CreatedOn = dto.CreatedOn
                     //State
 
                     // Add other properties as needed
@@ -66,13 +68,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<UserDTO>> CreateUser(UserCreateDTO userCreateDto)
         {
             var createdUser = await _userService.CreateUserAsync(userCreateDto);
-            return CreatedAtAction(nameof(GetUser), new { id = createdUser.UserId }, createdUser);
+            return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UserDTO userDto)
         {
-            if (id != userDto.UserId) return BadRequest();
+            if (id != userDto.Id) return BadRequest();
             var result = await _userService.UpdateUserAsync(userDto);
             return result ? NoContent() : NotFound();
         }

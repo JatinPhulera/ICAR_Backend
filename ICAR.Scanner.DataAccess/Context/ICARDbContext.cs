@@ -137,6 +137,7 @@ public partial class ICARDbContext : DbContext
 
         modelBuilder.Entity<Institution>(entity =>
         {
+            entity.Property(e => e.InstitutionID).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
@@ -161,6 +162,7 @@ public partial class ICARDbContext : DbContext
 
             entity.ToTable("RoleMaster");
 
+            entity.Property(e => e.RoleID).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
@@ -314,11 +316,11 @@ public partial class ICARDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4532EFF7F").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__536C85E45B58185A").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053429FFC697").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534DEFBBB53").IsUnique();
 
-            entity.Property(e => e.UserId).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
@@ -328,7 +330,7 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.IsEmailVerified).HasDefaultValue(false);
             entity.Property(e => e.IsLocked).HasDefaultValue(false);
-            entity.Property(e => e.LastAccessTime).HasColumnType("datetime");
+            entity.Property(e => e.LastLoginAt).HasColumnType("datetime");
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Latitude).HasMaxLength(255);
             entity.Property(e => e.Longitude).HasMaxLength(255);
@@ -343,6 +345,10 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.UpdatedBy).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.Username).HasMaxLength(50);
+
+            entity.HasOne(d => d.AddressNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.AddressId)
+                .HasConstraintName("FK_Users_Addresses");
 
             entity.HasOne(d => d.Institution).WithMany(p => p.Users)
                 .HasForeignKey(d => d.InstitutionID)

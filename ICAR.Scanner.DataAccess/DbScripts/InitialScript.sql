@@ -228,7 +228,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Institutions')
 BEGIN
 CREATE TABLE Institutions (
-    InstitutionID INT IDENTITY(1,1) NOT NULL,
+    InstitutionID UNIQUEIDENTIFIER NOT NULL,
     InstitutionName VARCHAR(100) NOT NULL,
     InstitutionHead VARCHAR(100) NULL,
 	InstitutionAdress VARCHAR(1000) NULL,
@@ -589,6 +589,73 @@ CONSTRAINT PK_AuditTree_Id PRIMARY KEY (Id),
 CONSTRAINT FK_AuditTree_Id FOREIGN KEY (TreeId) REFERENCES Tree(Id)
  );
 
+ GO---
+ 
+
+
+CREATE TABLE Institutions (
+    InstitutionID UNIQUEIDENTIFIER NOT NULL,
+    InstitutionName VARCHAR(100) NOT NULL,
+    InstitutionHead VARCHAR(100) NULL,
+	InstitutionAdress VARCHAR(1000) NULL,
+	Status BIT DEFAULT 1, 
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_Institutions PRIMARY KEY (InstitutionID)
+);
+GO
+
+CREATE TABLE RoleMaster (
+    RoleID  UNIQUEIDENTIFIER NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+	Status BIT DEFAULT 1,    
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_RoleMaster PRIMARY KEY (RoleID)
+);
+
+
+GO
+
+CREATE TABLE Users
+(
+    Id              UNIQUEIDENTIFIER NOT NULL,
+    Username            NVARCHAR(50) NOT NULL UNIQUE,
+    Email               NVARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash        NVARCHAR(255) NOT NULL,
+    FirstName           NVARCHAR(50),
+    LastName            NVARCHAR(50),    
+    Address             NVARCHAR(Max),
+    DateOfBirth         DATE,
+    PhoneNumber         NVARCHAR(20),
+    IsEmailVerified     BIT DEFAULT 0,
+    IsActive            BIT DEFAULT 1,
+    IsLocked            BIT DEFAULT 0,
+    LastLoginAt         DATETIME,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+    ResetToken          NVARCHAR(255),
+    ResetTokenExpiry    DATETIME,
+    MfaEnabled          BIT DEFAULT 0,
+    MfaSecret           NVARCHAR(255),
+    ProfilePictureUrl   NVARCHAR(255),
+    AddressId           UNIQUEIDENTIFIER NULL, -- FK to Addresses
+	RoleID				UNIQUEIDENTIFIER NULL,
+	InstitutionID		UNIQUEIDENTIFIER NULL,
+	State nvarchar(50) NULL,
+	Latitude nvarchar(255) NULL,
+    Longitude  nvarchar(255) NULL
+    CONSTRAINT PK_Users PRIMARY KEY (UserId),
+    CONSTRAINT FK_Users_Addresses FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId),
+	CONSTRAINT FK_Users_RoleMaster FOREIGN KEY (RoleID) REFERENCES RoleMaster(RoleID),
+	CONSTRAINT FK_Users_Institutions FOREIGN KEY (InstitutionID) REFERENCES Institutions(InstitutionID)
+);
 
 
 

@@ -4,7 +4,7 @@ namespace ICAR.Scanner.Models.DTOs;
 
 public class UserDTO
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string? FirstName { get; set; }
@@ -41,9 +41,9 @@ public class UserDTO
 
     public Guid? AddressId { get; set; }
 
-    public int? RoleId { get; set; }
+    public Guid? RoleId { get; set; }
 
-    public int? InstitutionId { get; set; }
+    public Guid? InstitutionId { get; set; }
     public DateTime LastAccessTime { get; set; } 
     public string Latitude { get; set; } 
     public string Longitude { get; set; } 

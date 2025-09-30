@@ -1,10 +1,11 @@
+using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.Models.DTOs;
 
 namespace ICAR.Scanner.Services.Services.UserService;
 
-    public interface IAuditTreeService
-    {
-        Task<IEnumerable<UserDTO>> GetAllUsersAsync();
+    public interface IUserService
+{
+        Task<IEnumerable<User>> GetAllUsersAsync();
         Task<UserDTO?> GetUserByIdAsync(Guid userId);
         Task<UserDTO> CreateUserAsync(UserCreateDTO userCreateDto);
         Task<bool> UpdateUserAsync(UserDTO userDto);

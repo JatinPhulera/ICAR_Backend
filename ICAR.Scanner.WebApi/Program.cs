@@ -10,6 +10,7 @@ using ICAR.Scanner.Services.Services.FileDetailService;
 using ICAR.Scanner.Services.Services.InstitutionsService;
 using ICAR.Scanner.Services.Services.RoleMasterService;
 using ICAR.Scanner.Services.Services.SENSORTYPEService;
+using ICAR.Scanner.Services.Services.AuditService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IAuditTreeService, AuditTreeService>();
 builder.Services.AddScoped<ITREESService, TREESService>();
 builder.Services.AddScoped<ISensorService, SensorService>();
-builder.Services.AddScoped<IAuditTreeService, AuditTreeService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFileDetailService, FileDetailService>();
 builder.Services.AddScoped<IInstitutionsService, InstitutionsService>();
 builder.Services.AddScoped<IRoleMasterService, RoleMasterService>();
