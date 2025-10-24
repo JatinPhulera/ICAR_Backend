@@ -32,7 +32,7 @@ public class UserService : IUserService
         {
             var user = _mapper.Map<User>(userCreateDto);
             user.Id = Guid.NewGuid();
-            user.PasswordHash = HashPassword(userCreateDto.Password);
+            user.PasswordHash = userCreateDto.Password;// HashPassword(userCreateDto.Password);
             user.CreatedOn = DateTime.UtcNow;
             user.IsActive = true;
 

@@ -4,7 +4,7 @@ namespace ICAR.Scanner.Models.DTOs.Request;
     public class SensorCreateDTO
 {
 
-    public Guid Id { get; set; }
+
 
     public string? SensorID { get; set; } = null!;
 
@@ -44,9 +44,9 @@ namespace ICAR.Scanner.Models.DTOs.Request;
 
     public bool? IsActive { get; set; } = null!;
 
-    public DateTime CreatedOn { get; set; } 
+    public DateTime CreatedOn { get; set; }     
 
-    public DateTime? UpdatedOn { get; set; }
+    public DateTime? UpdatedOn { get; set; }    
 
     public string? CreatedBy { get; set; } = null!;
 

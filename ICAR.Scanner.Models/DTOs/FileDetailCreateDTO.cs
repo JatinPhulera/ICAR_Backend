@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class FileDetailCreateDTO
 {
-    public Guid Id { get; set; }
+   
 
     public string? Filename { get; set; } = null!;
 

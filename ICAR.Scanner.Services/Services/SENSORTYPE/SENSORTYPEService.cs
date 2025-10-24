@@ -16,10 +16,10 @@ public class SENSORTYPEService : ISENSORTYPEService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SENSORTYPEDTO>> GetAllSENSORTYPEsAsync()
+        public async Task<IEnumerable<SENSORTYPE>> GetAllSENSORTYPEsAsync()
         {
             var SENSORTYPEs = await _SENSORTYPERepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<SENSORTYPEDTO>>(SENSORTYPEs);
+            return _mapper.Map<IEnumerable<SENSORTYPE>>(SENSORTYPEs);
         }
 
         public async Task<SENSORTYPEDTO?> GetSENSORTYPEByIdAsync(Guid SENSORTYPEId)

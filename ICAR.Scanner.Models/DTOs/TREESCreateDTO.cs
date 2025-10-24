@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
 public class TREESCreateDTO
 {
-    [Required]
-    public Guid Id { get; set; }
+ 
     [Required]
     public string? CommonName { get; set; } = null!;
 

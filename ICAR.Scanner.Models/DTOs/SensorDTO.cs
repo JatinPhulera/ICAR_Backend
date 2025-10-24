@@ -1,3 +1,4 @@
+using ICAR.Scanner.DataAccess.Models;
 using System.Net;
 
 namespace ICAR.Scanner.Models.DTOs;
@@ -54,9 +55,9 @@ public class SensorDTO
 
     public Guid? SENSORTYPEID { get; set; }
 
-    // public virtual SENSORTYPE? SENSORTYPENavigation { get; set; }
+    public virtual SENSORTYPE? SENSORTYPE { get; set; }
 
-    //public virtual ICollection<TREE> TREEs { get; set; } = new List<TREE>();
+    public virtual ICollection<Tree> Trees { get; set; } = new List<Tree>();
 }
 
 public class SensorResponse

@@ -40,6 +40,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                     PhoneNumber = dto.PhoneNumber,
                     LastName = dto.LastName,
                     FirstName = dto.FirstName,
+                    PasswordHash=dto.PasswordHash,
                     Username = dto.Username,
                     Email = dto.Email,
                     AddressId = dto.AddressId,

@@ -4,7 +4,6 @@ namespace ICAR.Scanner.Models.DTOs;
     public class AuditTreeCreateDTO
 {
 
-    public Guid Id { get; set; }
 
     [Required]
     public string? Name { get; set; } = null!;
