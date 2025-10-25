@@ -36,16 +36,16 @@ namespace ICAR.Scanner.WebApi.Controllers
                     // Map properties from UserDTO to User here
                     Id = dto.Id,
                     RoleId = dto.RoleID,
-                    InstitutionId=dto.InstitutionID,
+                    InstitutionId = dto.InstitutionID,
                     PhoneNumber = dto.PhoneNumber,
                     LastName = dto.LastName,
                     FirstName = dto.FirstName,
-                    PasswordHash=dto.PasswordHash,
+                    PasswordHash = dto.PasswordHash,
                     Username = dto.Username,
                     Email = dto.Email,
                     AddressId = dto.AddressId,
-                    LastAccessTime=dto.LastLoginAt.Value,
-                    Latitude=dto.Latitude,
+                    LastAccessTime = dto.LastLoginAt.Value,
+                    Latitude = dto.Latitude,
                     Longitude = dto.Longitude,
                     CreatedOn = dto.CreatedOn
                     //State
@@ -57,6 +57,46 @@ namespace ICAR.Scanner.WebApi.Controllers
             return Ok(response);
 
         }
+
+        [HttpGet("login")]
+        public async Task<ActionResult<UserResponse>> GetLoggedInUser(string username, string password)
+        {
+            var users = await _userService.GetAllUsersAsync();
+
+            // Find the user with the matching username
+            var user = users?.FirstOrDefault(u =>
+                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+                u.PasswordHash == password // Replace with proper hash comparison in production
+            );
+
+            var response = new UserResponse
+            {
+                Status = user != null ? "Success" : "NoData",
+                Data = user != null ? new List<UserDTO>
+            { new UserDTO
+            {
+                Id = user.Id,
+                RoleId = user.RoleID,
+                InstitutionId = user.InstitutionID,
+                PhoneNumber = user.PhoneNumber,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                PasswordHash = user.PasswordHash,
+                Username = user.Username,
+                Email = user.Email,
+                AddressId = user.AddressId,
+                LastAccessTime = user.LastLoginAt ?? DateTime.MinValue,
+                Latitude = user.Latitude,
+                Longitude = user.Longitude,
+                CreatedOn = user.CreatedOn
+                // Add other properties as needed
+            }
+                } : new List<UserDTO>()
+            };
+
+            return Ok(response);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUser(Guid id)
