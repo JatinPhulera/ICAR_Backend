@@ -25,7 +25,7 @@ public class TREESCreateDTO
 
     // public string? SensorType { get; set; } = null!;
 
-    public string? SENSORID { get; set; } = null!;
+    public Guid? SENSORID { get; set; } = null!;
 
     public string? OperatorName { get; set; } = null!;
 }
