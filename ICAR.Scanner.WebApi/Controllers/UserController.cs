@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using ICAR.Scanner.Models.DTOs;
 using ICAR.Scanner.Services.Services.UserService;
 using ICAR.Scanner.DataAccess.Models;
+using ICAR.Scanner.Services.Services.RoleMasterService;
+using ICAR.Scanner.Services.Services.InstitutionsService;
+using ICAR.Scanner.Services.Services.SensorService;
+using ICAR.Scanner.Services.Services.TreeService;
 
 namespace ICAR.Scanner.WebApi.Controllers
 {
@@ -10,10 +14,19 @@ namespace ICAR.Scanner.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IRoleMasterService _roleMasterService;
+        private readonly IInstitutionsService _institutionsService;
+        private readonly ISensorService _sensorService;
+        private readonly ITREESService _treesService;
 
-        public UsersController(IUserService userService)
-        {
+        public UsersController(IUserService userService, IRoleMasterService roleMasterService, IInstitutionsService institutionsService, ISensorService sensorService,
+    ITREESService treesService)
+        {           
             _userService = userService;
+            _roleMasterService = roleMasterService;
+            _institutionsService = institutionsService;
+            _sensorService = sensorService;
+            _treesService = treesService;
         }
 
         [HttpGet]
@@ -27,6 +40,10 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUserCustom()
         {
             var users = await _userService.GetAllUsersAsync();
+            var roles = await _roleMasterService.GetAllRoleMastersAsync(); // Assuming this returns IEnumerable<RoleMaster>
+            var institutions = await _institutionsService.GetAllInstitutionssAsync();
+            var roleLookup = roles.ToDictionary(r => r.RoleID, r => r.Name);
+            var institutionLookup = institutions.ToDictionary(i => i.InstitutionID, i => i.InstitutionName);
 
             var response = new UserResponse
             {
@@ -47,7 +64,15 @@ namespace ICAR.Scanner.WebApi.Controllers
                     LastAccessTime = dto.LastLoginAt.Value,
                     Latitude = dto.Latitude,
                     Longitude = dto.Longitude,
-                    CreatedOn = dto.CreatedOn
+                    CreatedOn = dto.CreatedOn,
+                    // Add RoleName property to UserDTO if not present
+                    RoleName = dto.RoleID.HasValue && roleLookup.ContainsKey(dto.RoleID.Value)
+                ? roleLookup[dto.RoleID.Value]
+                : null
+                    ,
+                    InstitutionName = dto.InstitutionID.HasValue && institutionLookup.ContainsKey(dto.InstitutionID.Value)
+                ? institutionLookup[dto.InstitutionID.Value]
+                : null
                     //State
 
                     // Add other properties as needed
@@ -57,6 +82,76 @@ namespace ICAR.Scanner.WebApi.Controllers
             return Ok(response);
 
         }
+
+        [HttpGet("dashboard")]
+        public async Task<ActionResult<DashboardDTO>> GetDashboard()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            var sensors = await _sensorService.GetAllSensorsAsync();
+            var trees = await _treesService.GetAllTreeAsync();
+
+            // Map entities to DTOs if needed (replace with AutoMapper if available)
+            var userDTOs = users.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Email = u.Email,
+                PasswordHash = u.PasswordHash,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                PhoneNumber = u.PhoneNumber,
+                RoleId = u.RoleID,
+                InstitutionId = u.InstitutionID,
+                CreatedOn = u.CreatedOn,
+                LastLoginAt = u.LastLoginAt,
+                Latitude = u.Latitude,
+                Longitude = u.Longitude
+                // Add other properties as needed
+            }).ToList();
+
+            var sensorDTOs = sensors.Select(s => new SensorDTO
+            {
+                Id = s.Id,
+                SensorID = s.SensorID,
+                Type = s.Type,
+                Installation_date = s.Installation_date,
+                Status = s.Status,
+                AddedBy = s.AddedBy,
+                CustID = s.CustID,
+                AssetID = s.AssetID,
+                Accession_Number = s.Accession_Number,
+                SensorUID = s.SensorUID,
+                Sensitivity = s.Sensitivity,
+                CommonName = s.CommonName,
+                UserName = s.UserName,
+                Expiry_date = s.Expiry_date,
+                batteryPercentage = s.batteryPercentage,
+                messageType = s.messageType,
+                isHooterOn = s.isHooterOn
+                // Add other properties as needed
+            }).ToList();
+
+            var treeDTOs = trees.Select(t => new TreesDto
+            {
+                Id = t.Id,
+                CommonName = t.CommonName,
+                Location = t.Location,
+                PlantationYear = t.PlantationYear
+            }).ToList();
+
+            var dashboard = new DashboardDTO
+            {
+                UserCount = userDTOs.Count,
+                SensorCount = sensorDTOs.Count,
+                TreeCount = treeDTOs.Count,
+                Users = userDTOs,
+                Sensors = sensorDTOs,
+                Trees = treeDTOs
+            };
+
+            return Ok(dashboard);
+        }
+
 
         [HttpGet("login")]
         public async Task<ActionResult<UserResponse>> GetLoggedInUser(string username, string password)
