@@ -20,5 +20,17 @@ public class MappingProfile : Profile
 
         CreateMap<AuditTree, AuditTreeDTO>().ReverseMap();
         CreateMap<AuditTreeCreateDTO, AuditTree>();
+
+        CreateMap<SENSORTYPE, SENSORTYPEDTO>().ReverseMap();
+        CreateMap<SENSORTYPECreateDTO, SENSORTYPE>();
+
+        CreateMap<FileDetail, FileDetailDTO>().ReverseMap();
+        CreateMap<FileDetailCreateDTO, FileDetail>();
+
+        CreateMap<Institution, InstitutionsDTO>().ReverseMap();
+        CreateMap<InstitutionsCreateDTO, Institution>();
+
+        CreateMap<RoleMaster, RoleMasterDTO>().ReverseMap();
+        CreateMap<RoleMasterCreateDTO, RoleMaster>();
     }
 }
