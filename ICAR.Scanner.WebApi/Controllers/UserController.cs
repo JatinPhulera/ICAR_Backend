@@ -157,6 +157,11 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<UserResponse>> GetLoggedInUser(string username, string password)
         {
             var users = await _userService.GetAllUsersAsync();
+            var roles = await _roleMasterService.GetAllRoleMastersAsync();
+            var institutions = await _institutionsService.GetAllInstitutionssAsync();
+            var roleLookup = roles.ToDictionary(r => r.RoleID, r => r.Name);
+            var institutionLookup = institutions.ToDictionary(i => i.InstitutionID, i => i.InstitutionName);
+
 
             // Find the user with the matching username
             var user = users?.FirstOrDefault(u =>
@@ -168,11 +173,12 @@ namespace ICAR.Scanner.WebApi.Controllers
             {
                 Status = user != null ? "Success" : "NoData",
                 Data = user != null ? new List<UserDTO>
-            { new UserDTO
+        {
+            new UserDTO
             {
                 Id = user.Id,
-                RoleId = user.RoleID,
                 InstitutionId = user.InstitutionID,
+                RoleId = user.RoleID,
                 PhoneNumber = user.PhoneNumber,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
@@ -183,10 +189,16 @@ namespace ICAR.Scanner.WebApi.Controllers
                 LastAccessTime = user.LastLoginAt ?? DateTime.MinValue,
                 Latitude = user.Latitude,
                 Longitude = user.Longitude,
-                CreatedOn = user.CreatedOn
-                // Add other properties as needed
+                CreatedOn = user.CreatedOn,
+                InstitutionName = user.InstitutionID.HasValue && institutionLookup.ContainsKey(user.InstitutionID.Value)
+                    ? institutionLookup[user.InstitutionID.Value]
+                    : null,
+                // Set RoleName using lookup
+                RoleName = user.RoleID.HasValue && roleLookup.ContainsKey(user.RoleID.Value)
+                    ? roleLookup[user.RoleID.Value]
+                    : null
             }
-                } : new List<UserDTO>()
+        } : new List<UserDTO>()
             };
 
             return Ok(response);
