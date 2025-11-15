@@ -28,9 +28,10 @@ namespace ICAR.Scanner.WebApi.Controllers
             var response = new TreesResponse
             {
                 Status = sessors != null && sessors.Any() ? "Success" : "NoData",
-                DataCount= sessors.ToList().Count,
+                DataCount = sessors.ToList().Count,
                 Data = sessors?.Select(dto => new TreesDto
                 {
+                    Id = dto.Id,
                     CommonName = dto.CommonName,
                     ScientificName = dto.ScientificName,
                     AccessionNumber = dto.AccessionNumber,
@@ -53,7 +54,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                     OperatorState = dto.OperatorState,
                     ImageUrl = dto.ImageUrl,
                     CreatedOn = dto.CreatedOn,
-                    CreatedBy = dto.CreatedBy
+                    CreatedBy = dto.CreatedBy,
+                    Alerts = "healthy"
                     //State
 
                     // Add other properties as needed
