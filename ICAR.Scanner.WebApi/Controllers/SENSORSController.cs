@@ -62,7 +62,7 @@ namespace ICAR.Scanner.WebApi.Controllers
         }
 
         [HttpGet("{type}")]
-        public async Task<ActionResult<SensorDTO>> GetSensorBySensorType(str id)
+        public async Task<ActionResult<SensorDTO>> GetSensorBySensorType(Guid id)
         {
             var sensor = await _sensorService.GetSensorByIdAsync(id);
             return sensor != null ? Ok(sensor) : NotFound();
