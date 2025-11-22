@@ -20,7 +20,7 @@ namespace ICAR.Scanner.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<SensorDTO>>> GetAllSensors()
         {
             var sensors = await _sensorService.GetAllSensorsAsync();
-            return Ok(sensors); 
+            return Ok(sensors);
         }
 
         [HttpGet("custom")]
@@ -43,7 +43,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                     batteryPercentage = dto.batteryPercentage,
                     Installation_date = dto.Installation_date,
                     CreatedOn = dto.CreatedOn,
-                    CreatedBy = dto.CreatedBy
+                    CreatedBy = dto.CreatedBy,
+                    SENSORTYPEID = dto.SENSORTYPEID,
                     //State
 
                     // Add other properties as needed
@@ -60,14 +61,8 @@ namespace ICAR.Scanner.WebApi.Controllers
             var sensor = await _sensorService.GetSensorByIdAsync(id);
             return sensor != null ? Ok(sensor) : NotFound();
         }
-
-        [HttpGet("{type}")]
-        public async Task<ActionResult<SensorDTO>> GetSensorBySensorType(Guid id)
-        {
-            var sensor = await _sensorService.GetSensorByIdAsync(id);
-            return sensor != null ? Ok(sensor) : NotFound();
-        }
         
+
         [HttpPost]
         public async Task<ActionResult<SensorDTO>> CreateSensor(SensorCreateDTO sensorCreateDto)
         {

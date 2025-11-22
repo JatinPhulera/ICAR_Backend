@@ -30,24 +30,27 @@ public class TREESService : ITREESService
 
     public async Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto)
     {
-        var user = _mapper.Map<Tree>(treeCreateDto);
-        user.Id = Guid.NewGuid();
+        var tree = _mapper.Map<Tree>(treeCreateDto);
+        tree.Id = Guid.NewGuid();
         //user.PasswordHash = HashPassword(treeCreateDto.Password);
-        user.CreatedOn = DateTime.UtcNow;
+        tree.CreatedOn = DateTime.UtcNow;
         //user.LastAuditTime = DateTime.UtcNow; TODO::JP
-        user.IsActive = true;
-        await _treeRepository.AddAsync(user);
+        tree.BotanicalName =  string.IsNullOrEmpty( tree.BotanicalName) ? "Unknown" : tree.BotanicalName; // Default value, can be updated later
+        tree.OperatorName =  string.IsNullOrEmpty( tree.OperatorName) ? tree.AddedByName : tree.OperatorName; // Default value, can be updated later
 
-        return _mapper.Map<TreesDto>(user);
+        tree.IsActive = true;
+        await _treeRepository.AddAsync(tree);
+
+        return _mapper.Map<TreesDto>(tree);
     }
 
     public async Task<bool> UpdateTreeAsync(TreesDto treeDto)
     {
         var tree = await _treeRepository.GetByIdAsync(treeDto.Id);
         if (tree == null) return false;
-
+        treeDto.CreatedOn = tree.CreatedOn; // Preserve original CreatedOn
         _mapper.Map(treeDto, tree); // Map updated fields from DTO to entity
-        tree.UpdatedOn = DateTime.UtcNow;
+        tree.UpdatedOn = tree.InstallationDate = DateTime.UtcNow;
        // tree.LastAuditTime = DateTime.UtcNow; //TODO::JP
         await _treeRepository.UpdateAsync(tree);
         return true;
