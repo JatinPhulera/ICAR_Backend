@@ -21,7 +21,7 @@ namespace ICAR.Scanner.WebApi.Controllers
 
         public UsersController(IUserService userService, IRoleMasterService roleMasterService, IInstitutionsService institutionsService, ISensorService sensorService,
     ITREESService treesService)
-        {           
+        {
             _userService = userService;
             _roleMasterService = roleMasterService;
             _institutionsService = institutionsService;
@@ -60,8 +60,9 @@ namespace ICAR.Scanner.WebApi.Controllers
                     PasswordHash = dto.PasswordHash,
                     Username = dto.Username,
                     Email = dto.Email,
-                    AddressId = dto.AddressId,
-                    LastAccessTime = dto.LastLoginAt.Value,
+                    Address = dto.Address,
+                    IsActive = dto.IsActive,
+                    //LastAccessTime = dto.LastLoginAt.Value,
                     Latitude = dto.Latitude,
                     Longitude = dto.Longitude,
                     CreatedOn = dto.CreatedOn,
@@ -186,6 +187,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Username = user.Username,
                 Email = user.Email,
                 AddressId = user.AddressId,
+                Address = user.Address,
+                IsActive = user.IsActive,
                 LastAccessTime = user.LastLoginAt ?? DateTime.MinValue,
                 Latitude = user.Latitude,
                 Longitude = user.Longitude,
