@@ -55,7 +55,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                     ImageUrl = dto.ImageUrl,
                     CreatedOn = dto.CreatedOn,
                     CreatedBy = dto.CreatedBy,
-                    Alerts = "healthy"
+                    Alerts = "healthy",
+                    UniqueImportance= dto.UniqueImportance
                     //State
 
                     // Add other properties as needed
