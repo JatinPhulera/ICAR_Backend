@@ -65,6 +65,49 @@ namespace ICAR.Scanner.WebApi.Controllers
 
         }
 
+        [HttpGet("customauditbytreeid")]
+        public async Task<ActionResult<IEnumerable<AuditTreeDTO>>> GetAllAuditTreeCustomAuditByTreeId(Guid treeId)
+        {
+            var AuditTree = await _AuditTreeervice.GetAllAuditTreesAsync();
+
+            var filteredAuditTree = AuditTree?.Where(dto => dto.TreeId == treeId)
+            .Select(dto => new AuditTreeDTO
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                TreeId = dto.TreeId,
+                AuditId = dto.AuditId,
+                AuditDate = dto.AuditDate,
+                Girth = dto.Girth,
+                Height = dto.Height,
+                Disease = dto.Disease,
+                Pest = dto.Pest,
+                PhysicalDamage = dto.PhysicalDamage,
+                Remarks = dto.Remarks,
+                AddedBy = dto.AddedBy,
+                LastUpdate = dto.LastUpdate,
+                State = dto.State,
+                Level = dto.Level,
+                V = dto.V,
+                ReviewedBy = dto.ReviewedBy,
+                ReviewedOn = dto.ReviewedOn,
+                AccessionNumber = dto.AccessionNumber,
+                Deletable = dto.Deletable,
+                Editable = dto.Editable,
+                Acceptable = dto.Acceptable
+                
+            }).ToList() ?? new List<AuditTreeDTO>();
+
+            var response = new AuditTreeResponse
+            {
+                Status = filteredAuditTree.Any() ? "Success" : "NoData",
+                Data = filteredAuditTree
+            };
+
+            return Ok(response);
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<AuditTreeDTO>> GetAuditTree(Guid id)
         {
