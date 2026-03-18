@@ -30,5 +30,6 @@ public class TREESCreateDTO
     public string? AddedByName { get; set; }
     public string? CreatedBy { get; set; }
     public string? UpdatedBy { get; set; }
+    public Guid? OperatorId { get; set; }
 
 }

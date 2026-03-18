@@ -33,7 +33,7 @@ public class AuditTreeService : IAuditTreeService
             var AuditTree = _mapper.Map<AuditTree>(AuditTreeCreateDto);
             AuditTree.Id = Guid.NewGuid();
             //AuditTree.PasswordHash = HashPassword(AuditTreeCreateDto.Password);
-            AuditTree.CreatedOn = DateTime.UtcNow;
+            AuditTree.CreatedOn = AuditTree.AuditDate = DateTime.UtcNow;
             AuditTree.IsActive = true;
 
             await _AuditTreeRepository.AddAsync(AuditTree);
@@ -46,7 +46,6 @@ public class AuditTreeService : IAuditTreeService
             var AuditTree = await _AuditTreeRepository.GetByIdAsync(AuditTreeDto.Id);
             if (AuditTree == null) return false;
 
-            _mapper.Map(AuditTreeDto, AuditTree); // Map updated fields from DTO to entity
             AuditTree.UpdatedOn = DateTime.UtcNow;
 
             await _AuditTreeRepository.UpdateAsync(AuditTree);

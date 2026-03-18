@@ -10,7 +10,7 @@ namespace ICAR.Scanner.Models.DTOs;
 
     public string? AuditId { get; set; } = null!;
 
-    public DateTime AuditDate { get; set; }
+    public DateTime? AuditDate { get; set; }
 
     public string? Girth { get; set; } = null!;
 

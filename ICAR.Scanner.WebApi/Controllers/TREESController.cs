@@ -69,7 +69,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                     //State
 
                     // Add other properties as needed
-                }).ToList() ?? new List<TreesDto>()
+                }).OrderByDescending(x=> x.CreatedOn).ToList() ?? new List<TreesDto>()
             };
 
             return Ok(response);
@@ -89,6 +89,8 @@ namespace ICAR.Scanner.WebApi.Controllers
             string operatorName = null;
             string operatorFirstName = null;
             string operatorLastName = null;
+            string operatorPhone = null;
+            string operatorState = null;
             if (!string.IsNullOrEmpty(tree.OperatorId) && Guid.TryParse(tree.OperatorId, out var opId))
             {
                 var user = users.FirstOrDefault(u => u.Id == opId);
@@ -97,6 +99,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                     operatorName = $"{user.FirstName} {user.LastName}".Trim();
                     operatorFirstName = $"{user.FirstName}".Trim();
                     operatorLastName= $"{user.LastName}".Trim();
+                    operatorPhone= $"{user.PhoneNumber}".Trim();
+                    operatorState= $"{user.State}".Trim();
                 }
             }
 
@@ -135,8 +139,8 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Importance = tree.Importance,
                 PlaceOfOrigin = tree.PlaceOfOrigin,
                 PlantationYear = tree.PlantationYear,
-                OperatorPhone = tree.OperatorPhone,
-                OperatorState = tree.OperatorState,
+                OperatorPhone = operatorPhone,
+                OperatorState = operatorState,
                 ImageUrl = tree.ImageUrl,
                 IsActive = tree.IsActive,
                 CreatedBy = tree.CreatedBy,
