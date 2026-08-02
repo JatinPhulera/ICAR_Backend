@@ -223,6 +223,445 @@ END
 END
 GO
 
+----CHANGES BY RANJAN
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Institutions')
+BEGIN
+CREATE TABLE Institutions (
+    InstitutionID UNIQUEIDENTIFIER NOT NULL,
+    InstitutionName VARCHAR(100) NOT NULL,
+    InstitutionHead VARCHAR(100) NULL,
+	InstitutionAdress VARCHAR(1000) NULL,
+	Status BIT DEFAULT 1, 
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_Institutions PRIMARY KEY (InstitutionID)
+);
+END
+GO
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = 'E0636C7C-4A02-41A2-8B27-C9EA30B08912';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+    INSERT INTO Institutions (InstitutionName, InstitutionHead) VALUES
+    ('NBPGR', 'NBPGR'),
+    ('CAFRI', 'CAFRI'),
+    ('IIHR', 'IIHR')
+
+END
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'RoleMaster')
+BEGIN
+CREATE TABLE RoleMaster (
+    RoleID  INT IDENTITY(1,1) NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+	Status BIT DEFAULT 1,    
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_RoleMaster PRIMARY KEY (RoleID)
+);
+END
+GO
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = 'AB03AF0A-5E38-4D6F-8EB3-3D8872428599';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+    INSERT INTO RoleMaster (Name) VALUES
+    ('SUPER ADMIN'),
+    ('ADMIN'),
+    ('FIELD STAFF')
+
+END
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
+BEGIN
+CREATE TABLE Users
+(
+    UserId              UNIQUEIDENTIFIER NOT NULL,
+    Username            NVARCHAR(50) NOT NULL UNIQUE,
+    Email               NVARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash        NVARCHAR(255) NOT NULL,
+    FirstName           NVARCHAR(50),
+    LastName            NVARCHAR(50),    
+    Address             NVARCHAR(Max),
+    DateOfBirth         DATE,
+    PhoneNumber         NVARCHAR(20),
+    IsEmailVerified     BIT DEFAULT 0,
+    IsActive            BIT DEFAULT 1,
+    IsLocked            BIT DEFAULT 0,
+    LastLoginAt         DATETIME,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+    ResetToken          NVARCHAR(255),
+    ResetTokenExpiry    DATETIME,
+    MfaEnabled          BIT DEFAULT 0,
+    MfaSecret           NVARCHAR(255),
+    ProfilePictureUrl   NVARCHAR(255),
+    AddressId           UNIQUEIDENTIFIER NULL, -- FK to Addresses
+	RoleID				INT,
+	InstitutionID		INT,
+    CONSTRAINT PK_Users PRIMARY KEY (UserId),
+    CONSTRAINT FK_Users_Addresses FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId),
+	CONSTRAINT FK_Users_RoleMaster FOREIGN KEY (RoleID) REFERENCES RoleMaster(RoleID),
+	CONSTRAINT FK_Users_Institutions FOREIGN KEY (InstitutionID) REFERENCES Institutions(InstitutionID)
+);
+END
+GO
+
+
+BEGIN
+DECLARE @ScriptLogId UNIQUEIDENTIFIER = '0C19BEB0-174D-4547-9E06-2F9E55381DCC';
+IF NOT EXISTS (SELECT 1 FROM ScriptLog WHERE ScriptLogId = @ScriptLogId)
+BEGIN
+        -- ===========================================
+    -- Insert Dummy Address and User #1
+    -- ===========================================
+    DECLARE @AddressId1 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @UserId1    UNIQUEIDENTIFIER = NEWID();
+
+    INSERT INTO Addresses (AddressId, AddressLine1, AddressLine2, City, StateId, PostalCode, CountryId, IsActive) VALUES (
+        @AddressId1, '123 Main St', 'Apt 101', 'Springfield', 1, '12345', 1, 1);
+
+    INSERT INTO Users (UserId, Username, Email, PasswordHash, FirstName, LastName,Address, DateOfBirth, PhoneNumber, IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
+        ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID) 
+        VALUES (@UserId1, 'JP', 'jp@jp.com', 'hashedpassword1', 'Jatin', 'P','Address-1', '1990-01-01', '555-1234',
+        1, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
+        NULL, NULL, 0, NULL, NULL, @AddressId1,1,1
+    );
+
+    -- ===========================================
+    -- Insert Dummy Address and User #2
+    -- ===========================================
+    DECLARE @AddressId2 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @UserId2    UNIQUEIDENTIFIER = NEWID();
+
+    INSERT INTO Addresses (
+        AddressId, AddressLine1, AddressLine2, City, StateId, PostalCode, CountryId, IsActive
+    ) VALUES (
+        @AddressId2, '456 Elm St', NULL, 'Shelbyville', 2, '67890', 1, 1
+    );
+
+    INSERT INTO Users (
+        UserId, Username, Email, PasswordHash, FirstName, LastName, Address, DateOfBirth, PhoneNumber,
+        IsEmailVerified, IsActive, IsLocked, LastLoginAt, CreatedOn, UpdatedOn, CreatedBy, UpdatedBy,
+        ResetToken, ResetTokenExpiry, MfaEnabled, MfaSecret, ProfilePictureUrl, AddressId,RoleID,InstitutionID
+    ) VALUES (
+        @UserId2, 'JP Test', 'jptest@gmail.com', 'hashedpassword2', 'JP', 'Test','Address-1', '1995-05-15', '555-5678',
+        0, 1, 0, GETDATE(), GETDATE(), NULL, 'system', NULL,
+        NULL, NULL, 0, NULL, NULL, @AddressId2,1,1
+    );
+
+    INSERT INTO ScriptLog (ScriptLogId) VALUES (@ScriptLogId);
+END
+END
+
+GO
+CREATE TABLE SENSORTYPE
+(
+    SENSORTYPEID        UNIQUEIDENTIFIER NOT NULL,
+    SENSORTYPE          NVARCHAR(255) NOT NULL UNIQUE,
+    SENSORUID           NVARCHAR(Max) NULL,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+    CONSTRAINT PK_SENSORTYPE PRIMARY KEY (SENSORTYPEID)
+);
+GO
+
+CREATE TABLE SENSORS
+(
+    SENSORID        UNIQUEIDENTIFIER NOT NULL,
+    SENSORTYPE          NVARCHAR(255)  NULL ,
+    SENSORUID           NVARCHAR(Max) NULL,
+	CommonName			NVARCHAR(255)  NULL,
+	AccessionNumber  	NVARCHAR(255)  NULL,
+	UserName			NVARCHAR(255)  NULL,
+	addedBy			NVARCHAR(255)  NULL,
+	custID			NVARCHAR(255)  NULL,
+	assetID			NVARCHAR(255)  NULL,
+	displayID			NVARCHAR(255)  NULL,
+	accession_number			NVARCHAR(255)  NULL,
+	expiry_date			DATETIME NULL,
+	batteryPercentage   NVARCHAR(255)  NULL,
+	messageType				NVARCHAR(255)  NULL,
+	isHooterOn				BIT DEFAULT 1,
+	isSensitivity	BIT DEFAULT 1,
+	sensitivityValue	 NVARCHAR(255)  NULL,
+	installation_date	DATETIME NULL,
+	IsActive            BIT DEFAULT 1,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+	SENSORTYPEID		UNIQUEIDENTIFIER
+    CONSTRAINT PK_SENSORS PRIMARY KEY (SENSORID),
+	CONSTRAINT FK_SENSORS_SENSORTYPE FOREIGN KEY (SENSORTYPEID) REFERENCES SENSORTYPE(SENSORTYPEID)
+);
+
+GO
+
+CREATE TABLE TREES
+(
+    TREEID        UNIQUEIDENTIFIER NOT NULL,
+	COMMONNAME	  NVARCHAR(255)  NULL ,
+	CULTIVERNAME	 NVARCHAR(255)  NULL ,
+	ACCESSIONNUMBER	 NVARCHAR(255)  NULL ,
+	SCIENTIFICNAME	 NVARCHAR(255)  NULL ,
+	DONORORGANIZATION	 NVARCHAR(255)  NULL ,
+	PLACEOFORGIN	 NVARCHAR(255)  NULL ,
+	FGBLOCATION		NVARCHAR(255)  NULL ,
+	UNIQUEIMPORTANCE		NVARCHAR(255)  NULL ,
+	PLANTATIONYEAR	NVARCHAR(255)  NULL ,
+    SENSORTYPE          NVARCHAR(255)  NULL ,
+    SENSORUID           NVARCHAR(Max) NULL,
+	SELECTFIELDSTAFF           NVARCHAR(Max) NULL,
+	age_units		NVARCHAR(Max) NULL,
+	ProfilePictureUrl   NVARCHAR(255),
+	IsActive            BIT DEFAULT 1,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+	SENSORID		UNIQUEIDENTIFIER
+    CONSTRAINT PK_TREEID PRIMARY KEY (TREEID),
+	CONSTRAINT FK_TREES_SENSORID FOREIGN KEY (SENSORID) REFERENCES SENSORS(SENSORID)
+);
+
+
+
+----updated---
+CREATE TABLE [dbo].[Tree](
+	[Id] [uniqueidentifier] NOT NULL,
+	[DisplayId] [nvarchar](255) NULL,
+	[AssetType] [nvarchar](255) NULL,
+	[Location] [nvarchar](255) NULL,
+	[Alerts] [nvarchar](255) NULL,
+	[AddedBy] [nvarchar](255) NULL,
+	[SENSORID] [uniqueidentifier] NULL,
+	[AccessionNumber] [nvarchar](255) NULL,
+	[AssetId] [nvarchar](255) NULL,
+	[RfidTagCreatedOn] [nvarchar](255) NULL,
+	[LastAuditTime] [nvarchar](255) NULL,
+	[AssetSubType] [nvarchar](255) NULL,
+	[SensorType] [nvarchar](255) NULL,
+	[OperatorId] [nvarchar](255) NULL,
+	[AddedByName] [nvarchar](255) NULL,
+	[OperatorName] [nvarchar](255) NULL,
+	[Age] [nvarchar](255) NULL,
+	[AgeUnits] [nvarchar](255) NULL,
+	[Latitude] [nvarchar](255) NULL,
+	[Longitude] [nvarchar](255) NULL,
+	[BotanicalName] [nvarchar](255) NULL,
+	[ExpiryDate] [nvarchar](255) NULL,
+	[InstallationDate] [datetime] NULL,
+	[Origin] [nvarchar](255) NULL,
+	[UniqueImportance] [nvarchar](255) NULL,
+	[Value] [nvarchar](255) NULL,
+	[AccessionOrigin] [nvarchar](255) NULL,
+	[CommonName] [nvarchar](255) NULL,
+	[ScientificName] [nvarchar](255) NULL,
+	[LastUpdated] [datetime] NULL,
+	[Status] [nvarchar](255) NULL,
+	[CultiverName] [nvarchar](255) NULL,
+	[DonorOrganization] [nvarchar](255) NULL,
+	[Importance] [nvarchar](255) NULL,
+	[PlaceOfOrigin] [nvarchar](255) NULL,
+	[PlantationYear] [nvarchar](255) NULL,
+	[OperatorFirstName] [nvarchar](255) NULL,
+	[OperatorLastName] [nvarchar](255) NULL,
+	[OperatorPhone] [nvarchar](255) NULL,
+	[OperatorState] [nvarchar](255) NULL,
+	[ImageUrl] [nvarchar](255) NULL,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,	
+CONSTRAINT PK_Id PRIMARY KEY (Id),
+CONSTRAINT FK_TREES_SENSORID FOREIGN KEY (SENSORID) REFERENCES SENSORS(Id)
+ );
+
+
+
+Go
+
+CREATE TABLE SENSORS
+(
+    Id        UNIQUEIDENTIFIER NOT NULL,
+    SensorID          NVARCHAR(255)  NULL ,
+    Type           NVARCHAR(255) NULL,	
+	Installation_date	DATETIME NULL,
+	Status           NVARCHAR(255) NULL,	
+    AddedBy           NVARCHAR(50) NULL,
+	CustID			 NVARCHAR(50) NULL,
+	AssetID			NVARCHAR(255)  NULL,
+	Accession_Number			NVARCHAR(255)  NULL,
+	SensorUID			NVARCHAR(255)  NULL,
+	Sensitivity			NVARCHAR(255)  NULL,
+	CommonName			NVARCHAR(255)  NULL,
+	AccessionNumber  	NVARCHAR(255)  NULL,
+	UserName			NVARCHAR(255)  NULL,
+	Expiry_date			DATETIME NULL,
+	batteryPercentage   NVARCHAR(255)  NULL,
+	messageType				NVARCHAR(255)  NULL,
+	isHooterOn				BIT DEFAULT 1,
+	isSensitivity	BIT DEFAULT 1,
+	sensitivityValue	 NVARCHAR(255)  NULL,
+	IsActive            BIT DEFAULT 1,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+	SENSORTYPEID		UNIQUEIDENTIFIER
+    CONSTRAINT PK_SENSORS PRIMARY KEY (Id),
+	CONSTRAINT FK_SENSORS_SENSORTYPE FOREIGN KEY (SENSORTYPEID) REFERENCES SENSORTYPE(SENSORTYPEID)
+);
+
+Go
+
+ALTER TABLE Users
+ADD [State] [nvarchar](50) NULL,
+[Latitude] [nvarchar](255) NULL,
+    [Longitude]  [nvarchar](255) NULL;
+
+    Go
+
+    CREATE TABLE [dbo].[FileDetail](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Filename] [nvarchar](255) NULL,
+	[Filetype] [nvarchar](255) NULL,
+	[FilePath] [nvarchar](max) NULL,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[TreeId] [uniqueidentifier] NOT NULL,
+CONSTRAINT PK_FileDetail_Id PRIMARY KEY (Id),
+CONSTRAINT FK_Tree_Id FOREIGN KEY (TreeId) REFERENCES Tree(Id)
+ );
+
+
+ GO
+
+ CREATE TABLE [dbo].[AuditTree](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](255) NULL,
+	[AuditId] [nvarchar](255) NULL,
+	[AuditDate] DATETIME NOT NULL DEFAULT GETDATE(),
+	[Girth] [nvarchar](255) NULL,
+	[Height] [nvarchar](255) NULL,
+	[Disease] [nvarchar](255) NULL,
+	[Pest] [nvarchar](255) NULL,
+	[PhysicalDamage] [nvarchar](255) NULL,
+	[Remarks] [nvarchar](255) NULL,
+	[AddedBy] [nvarchar](255) NULL,
+	[LastUpdate] DATETIME NULL,
+	[State] [nvarchar](255) NULL,
+	[Level] [nvarchar](255) NULL,
+	[V] [nvarchar](255) NULL,
+	[ReviewedBy] [nvarchar](255) NULL,
+	[ReviewedOn] DATETIME NULL,
+	[AccessionNumber] [nvarchar](255) NULL,
+	[Deletable] BIT DEFAULT 1,
+	[Editable] BIT DEFAULT 1,
+	[Acceptable] BIT DEFAULT 1,
+	[IsActive] BIT DEFAULT 1,
+	[CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(),
+	[UpdatedOn] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[TreeId] [uniqueidentifier] NOT NULL,
+CONSTRAINT PK_AuditTree_Id PRIMARY KEY (Id),
+CONSTRAINT FK_AuditTree_Id FOREIGN KEY (TreeId) REFERENCES Tree(Id)
+ );
+
+ GO---
+ 
+
+
+CREATE TABLE Institutions (
+    InstitutionID UNIQUEIDENTIFIER NOT NULL,
+    InstitutionName VARCHAR(100) NOT NULL,
+    InstitutionHead VARCHAR(100) NULL,
+	InstitutionAdress VARCHAR(1000) NULL,
+	Status BIT DEFAULT 1, 
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_Institutions PRIMARY KEY (InstitutionID)
+);
+GO
+
+CREATE TABLE RoleMaster (
+    RoleID  UNIQUEIDENTIFIER NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+	Status BIT DEFAULT 1,    
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+	UpdatedOn           DATETIME NULL,
+	CreatedBy           NVARCHAR(50) NULL,
+	UpdatedBy           NVARCHAR(50) NULL,
+	CONSTRAINT PK_RoleMaster PRIMARY KEY (RoleID)
+);
+
+
+GO
+
+CREATE TABLE Users
+(
+    Id              UNIQUEIDENTIFIER NOT NULL,
+    Username            NVARCHAR(50) NOT NULL UNIQUE,
+    Email               NVARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash        NVARCHAR(255) NOT NULL,
+    FirstName           NVARCHAR(50),
+    LastName            NVARCHAR(50),    
+    Address             NVARCHAR(Max),
+    DateOfBirth         DATE,
+    PhoneNumber         NVARCHAR(20),
+    IsEmailVerified     BIT DEFAULT 0,
+    IsActive            BIT DEFAULT 1,
+    IsLocked            BIT DEFAULT 0,
+    LastLoginAt         DATETIME,
+    CreatedOn           DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedOn           DATETIME NULL,
+    CreatedBy           NVARCHAR(50),
+    UpdatedBy           NVARCHAR(50),
+    ResetToken          NVARCHAR(255),
+    ResetTokenExpiry    DATETIME,
+    MfaEnabled          BIT DEFAULT 0,
+    MfaSecret           NVARCHAR(255),
+    ProfilePictureUrl   NVARCHAR(255),
+    AddressId           UNIQUEIDENTIFIER NULL, -- FK to Addresses
+	RoleID				UNIQUEIDENTIFIER NULL,
+	InstitutionID		UNIQUEIDENTIFIER NULL,
+	State nvarchar(50) NULL,
+	Latitude nvarchar(255) NULL,
+    Longitude  nvarchar(255) NULL
+    CONSTRAINT PK_Users PRIMARY KEY (UserId),
+    CONSTRAINT FK_Users_Addresses FOREIGN KEY (AddressId) REFERENCES Addresses(AddressId),
+	CONSTRAINT FK_Users_RoleMaster FOREIGN KEY (RoleID) REFERENCES RoleMaster(RoleID),
+	CONSTRAINT FK_Users_Institutions FOREIGN KEY (InstitutionID) REFERENCES Institutions(InstitutionID)
+);
+
+
+
+
+---
+
 -- SELECT * FROM Countries
 -- SELECT * FROM States
 -- SELECT * FROM Addresses

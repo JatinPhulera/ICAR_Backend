@@ -11,4 +11,8 @@
     <Folder Include="Response/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ICAR.Scanner.DataAccess\ICAR.Scanner.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

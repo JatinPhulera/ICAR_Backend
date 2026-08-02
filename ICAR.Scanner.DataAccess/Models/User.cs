@@ -5,7 +5,7 @@ namespace ICAR.Scanner.DataAccess.Models;
 
 public partial class User
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
     public string Username { get; set; } = null!;
 
@@ -16,6 +16,8 @@ public partial class User
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
+
+    public string? Address { get; set; }
 
     public DateOnly? DateOfBirth { get; set; }
 
@@ -49,5 +51,19 @@ public partial class User
 
     public Guid? AddressId { get; set; }
 
-    public virtual Address? Address { get; set; }
+    public Guid? RoleID { get; set; }
+
+    public Guid? InstitutionID { get; set; }
+
+    public string? State { get; set; }
+
+    public string? Latitude { get; set; }
+
+    public string? Longitude { get; set; }
+
+    public virtual Address? AddressNavigation { get; set; }
+
+    public virtual Institution? Institution { get; set; }
+
+    public virtual RoleMaster? Role { get; set; }
 }

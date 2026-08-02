@@ -3,8 +3,14 @@ using ICAR.Scanner.WebApi.Automapper;
 using ICAR.Scanner.DataAccess.Context;
 using ICAR.Scanner.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
+using ICAR.Scanner.Services.Services.TreeService;
 using ICAR.Scanner.Services.Services.UserService;
-using ICAR.Scanner.Services.Services.MapperService;
+using ICAR.Scanner.Services.Services.SensorService;
+using ICAR.Scanner.Services.Services.FileDetailService;
+using ICAR.Scanner.Services.Services.InstitutionsService;
+using ICAR.Scanner.Services.Services.RoleMasterService;
+using ICAR.Scanner.Services.Services.SENSORTYPEService;
+using ICAR.Scanner.Services.Services.AuditService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,30 +26,45 @@ builder.Services.AddDbContext<ICARDbContext>(options =>
 
 builder.Services.AddICARAutoMapper(); // Registers AutoMapper and your generic service
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IAuditTreeService, AuditTreeService>();
+builder.Services.AddScoped<ITREESService, TREESService>();
+builder.Services.AddScoped<ISensorService, SensorService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFileDetailService, FileDetailService>();
+builder.Services.AddScoped<IInstitutionsService, InstitutionsService>();
+builder.Services.AddScoped<IRoleMasterService, RoleMasterService>();
+builder.Services.AddScoped<ISENSORTYPEService, SENSORTYPEService>();
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
+
+
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:5191") // Angular frontend origin
+              .AllowAnyMethod() // Allow GET, POST, PUT, DELETE
+              .AllowAnyHeader() // Allow headers like Authorization, Content-Type
+              .AllowCredentials(); // Allow credentials (e.g., for JWT authentication)
+    });
+});
 
 var app = builder.Build();
-
-// var allowedOrigins = builder.Configuration.GetSection($"AppSettings:AllowedOrigins");
-// builder.Services.AddCors(opti`ons =>
-// {
-//     options.AddPolicy(name: corsPolicy,
-//                       builder =>
-//                       {
-//                           builder.WithOrigins(allowedOrigins.Get<string[]>()).AllowAnyMethod().AllowAnyHeader()
-//                           .WithExposedHeaders("Content-Disposition"); // To do from App setting
-//                       });
-// });
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // Optional, remove if not using HTTPS
+app.UseCors("AllowAngular"); // Apply CORS policy before Authorization
+app.UseAuthorization();
 app.MapControllers();
 
 var summaries = new[]
