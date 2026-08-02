@@ -7,6 +7,7 @@ namespace ICAR.Scanner.Services.Services.SensorService;
 public interface ISensorService
 {
     Task<IEnumerable<SENSOR>> GetAllSensorsAsync();
+    Task<IEnumerable<SENSOR>> GetUnassignedActiveSensorsAsync();
     Task<SensorDTO?> GetSensorByIdAsync(Guid userId);
     Task<SensorDTO> CreateSensorAsync(SensorCreateDTO sesorCreateDto);
     Task<bool> UpdateSensorAsync(SensorDTO userDto);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ICAR.Scanner.Models.DTOs;
     public class RoleMasterCreateDTO
 {
-    public int RoleID { get; set; }
+    public Guid RoleID { get; set; }
 
     public string Name { get; set; } = null!;
 

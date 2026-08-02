@@ -192,6 +192,7 @@ public partial class ICARDbContext : DbContext
             entity.Property(e => e.Expiry_date).HasColumnType("datetime");
             entity.Property(e => e.Installation_date).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.IsAssigned).HasDefaultValue(false);
             entity.Property(e => e.Sensitivity).HasMaxLength(255);
             entity.Property(e => e.SensorID).HasMaxLength(255);
             entity.Property(e => e.SensorUID).HasMaxLength(255);

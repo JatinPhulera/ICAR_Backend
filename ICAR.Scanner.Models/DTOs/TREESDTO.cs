@@ -28,6 +28,8 @@ public class TreesDto
 
     public string? SensorType { get; set; }
 
+    public Guid? SensorTypeId { get; set; }
+
     public string? OperatorId { get; set; }
 
     public string? AddedByName { get; set; }
@@ -93,8 +95,6 @@ public class TreesDto
     public string? CreatedBy { get; set; }
 
     public string? UpdatedBy { get; set; }
-
-    public Guid? SENSOR { get; set; }
 }
 
 public class TreesResponse

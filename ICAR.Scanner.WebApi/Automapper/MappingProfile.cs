@@ -10,7 +10,8 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Tree, TreesDto>().ReverseMap();
-        CreateMap<TREESCreateDTO, Tree>();
+        CreateMap<TREESCreateDTO, Tree>()
+            .ForMember(dest => dest.SENSORID, opt => opt.MapFrom(src => src.SensorId));
 
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<UserCreateDTO, User>();

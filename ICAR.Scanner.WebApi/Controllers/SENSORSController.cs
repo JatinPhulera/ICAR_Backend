@@ -1,4 +1,4 @@
-﻿using ICAR.Scanner.Models.DTOs;
+using ICAR.Scanner.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using ICAR.Scanner.Services.Services.SensorService;
 using ICAR.Scanner.Models.DTOs.Request;
@@ -26,14 +26,13 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpGet("custom")]
         public async Task<ActionResult<IEnumerable<SensorDTO>>> GetAllSensorCustom()
         {
-            var sessors = await _sensorService.GetAllSensorsAsync();
+            var sessors = await _sensorService.GetUnassignedActiveSensorsAsync();
 
             var response = new SensorResponse
             {
                 Status = sessors != null && sessors.Any() ? "Success" : "NoData",
                 Data = sessors?.Select(dto => new SensorDTO
                 {
-                    // Map properties from UserDTO to User here
                     Id = dto.Id,
                     Status = dto.Status,
                     SensorID = dto.SensorID,
@@ -45,9 +44,9 @@ namespace ICAR.Scanner.WebApi.Controllers
                     CreatedOn = dto.CreatedOn,
                     CreatedBy = dto.CreatedBy,
                     SENSORTYPEID = dto.SENSORTYPEID,
-                    //State
-
-                    // Add other properties as needed
+                    SensorUID = dto.SensorUID,
+                    IsActive = dto.IsActive,
+                    IsAssigned = dto.IsAssigned,
                 }).ToList() ?? new List<SensorDTO>()
             };
 
@@ -66,8 +65,16 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<SensorDTO>> CreateSensor(SensorCreateDTO sensorCreateDto)
         {
-            var createdSensor = await _sensorService.CreateSensorAsync(sensorCreateDto);
-            return CreatedAtAction(nameof(GetSensor), new { id = createdSensor.Id }, createdSensor);
+            try
+            {
+                var createdSensor = await _sensorService.CreateSensorAsync(sensorCreateDto);
+                return CreatedAtAction(nameof(GetSensor), new { id = createdSensor.Id }, createdSensor);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Duplicate RFID — return 409 Conflict with a clear message
+                return Conflict(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -81,8 +88,15 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSensor(Guid id)
         {
-            var result = await _sensorService.DeleteSensorAsync(id);
-            return result ? NoContent() : NotFound();
+            try
+            {
+                var result = await _sensorService.DeleteSensorAsync(id);
+                return result ? NoContent() : NotFound(new { message = "Sensor not found." });
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new { message = $"Cannot delete sensor: {ex.InnerException?.Message ?? ex.Message}" });
+            }
         }
     }
 }

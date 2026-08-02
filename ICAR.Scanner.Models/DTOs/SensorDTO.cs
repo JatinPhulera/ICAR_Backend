@@ -45,6 +45,8 @@ public class SensorDTO
 
     public bool? IsActive { get; set; }
 
+    public bool IsAssigned { get; set; }
+
     public DateTime CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }

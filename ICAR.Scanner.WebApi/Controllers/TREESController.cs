@@ -1,4 +1,4 @@
-﻿using ICAR.Scanner.DataAccess.Models;
+using ICAR.Scanner.DataAccess.Models;
 using ICAR.Scanner.Models.DTOs;
 using ICAR.Scanner.Services.Services.TreeService;
 using ICAR.Scanner.Services.Services.UserService;
@@ -56,6 +56,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                     PlantationYear = dto.PlantationYear,
                     SensorType = dto.SensorType,
                     OperatorId = dto.OperatorId,
+                    InstallationDate = dto.InstallationDate,
                     OperatorFirstName = !string.IsNullOrEmpty(dto.OperatorId) && Guid.TryParse(dto.OperatorId, out var opId) ? users.FirstOrDefault(u => u.Id == opId) is { } user ? $"{user.FirstName}".Trim() : null : null,
                     OperatorLastName = !string.IsNullOrEmpty(dto.OperatorId) && Guid.TryParse(dto.OperatorId, out var opIdname) ? users.FirstOrDefault(u => u.Id == opIdname) is { } userfname ? $"{userfname.LastName}".Trim() : null : null,
                     OperatorPhone = dto.OperatorPhone,
@@ -65,7 +66,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                     CreatedBy = dto.CreatedBy,
                     Alerts = "healthy",
                     UniqueImportance= dto.UniqueImportance,
-                    OperatorName = !string.IsNullOrEmpty(dto.OperatorId) && Guid.TryParse(dto.OperatorId, out var opIdfullname)? users.FirstOrDefault(u => u.Id == opIdfullname) is { } userfullname ? $"{userfullname.FirstName} {userfullname.LastName}".Trim(): null : null
+                    OperatorName = !string.IsNullOrEmpty(dto.OperatorId) && Guid.TryParse(dto.OperatorId, out var opIdfullname) ? users.FirstOrDefault(u => u.Id == opIdfullname) is { } userfullname ? $"{userfullname.FirstName} {userfullname.LastName}".Trim() : null : null
                     //State
 
                     // Add other properties as needed
@@ -77,15 +78,24 @@ namespace ICAR.Scanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TreesDto>> GetTree(Guid id)
+        public async Task<ActionResult<TreesDto>> GetTree(string id)
         {
-            var tree = await _treeService.GetTreeByIdAsync(id);
+            TreesDto tree = null;
+            if (Guid.TryParse(id, out Guid treeId))
+            {
+                tree = await _treeService.GetTreeByIdAsync(treeId);
+            }
+            else
+            {
+                tree = await _treeService.GetTreeByRfidAsync(id);
+            }
+
             if (tree == null)
                 return NotFound();
 
             var users = await _userService.GetAllUsersAsync();
 
-            // Resolve OperatorName from OperatorId (string) to User's full name
+            // Resolve OperatorName from OperatorId (string/Guid) to User's full name
             string operatorName = null;
             string operatorFirstName = null;
             string operatorLastName = null;
@@ -98,9 +108,9 @@ namespace ICAR.Scanner.WebApi.Controllers
                 {
                     operatorName = $"{user.FirstName} {user.LastName}".Trim();
                     operatorFirstName = $"{user.FirstName}".Trim();
-                    operatorLastName= $"{user.LastName}".Trim();
-                    operatorPhone= $"{user.PhoneNumber}".Trim();
-                    operatorState= $"{user.State}".Trim();
+                    operatorLastName = $"{user.LastName}".Trim();
+                    operatorPhone = $"{user.PhoneNumber}".Trim();
+                    operatorState = $"{user.State}".Trim();
                 }
             }
 
@@ -116,6 +126,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                 AccessionNumber = tree.AccessionNumber,
                 AssetId = tree.AssetId,
                 SensorType = tree.SensorType,
+                SensorTypeId = tree.SensorTypeId,
                 OperatorId = tree.OperatorId,
                 AddedByName = tree.AddedByName,
                 OperatorName = operatorName,
@@ -139,13 +150,13 @@ namespace ICAR.Scanner.WebApi.Controllers
                 Importance = tree.Importance,
                 PlaceOfOrigin = tree.PlaceOfOrigin,
                 PlantationYear = tree.PlantationYear,
+                InstallationDate = tree.InstallationDate,
                 OperatorPhone = operatorPhone,
                 OperatorState = operatorState,
                 ImageUrl = tree.ImageUrl,
                 IsActive = tree.IsActive,
                 CreatedBy = tree.CreatedBy,
-                UpdatedBy = tree.UpdatedBy,
-                SENSOR = tree.SENSORID
+                UpdatedBy = tree.UpdatedBy
             };
 
             return Ok(dto);
@@ -155,16 +166,30 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<TreesDto>> CreateTree(TREESCreateDTO treeCreateDto)
         {
-            var createdTree = await _treeService.CreateTreeAsync(treeCreateDto);
-            return CreatedAtAction(nameof(GetTree), new { id = createdTree.Id }, createdTree);
+            try
+            {
+                var createdTree = await _treeService.CreateTreeAsync(treeCreateDto);
+                return CreatedAtAction(nameof(GetTree), new { id = createdTree.Id }, createdTree);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTree(Guid id, TreesDto treeDto)
         {
             if (id != treeDto.Id) return BadRequest();
-            var result = await _treeService.UpdateTreeAsync(treeDto);
-            return result ? NoContent() : NotFound();
+            try
+            {
+                var result = await _treeService.UpdateTreeAsync(treeDto);
+                return result ? NoContent() : NotFound();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]

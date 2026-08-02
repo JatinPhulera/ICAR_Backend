@@ -164,10 +164,11 @@ namespace ICAR.Scanner.WebApi.Controllers
             var institutionLookup = institutions.ToDictionary(i => i.InstitutionID, i => i.InstitutionName);
 
 
-            // Find the user with the matching username
+            // Find the user with matching username or email
             var user = users?.FirstOrDefault(u =>
-                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                u.PasswordHash == password // Replace with proper hash comparison in production
+                ((u.Username != null && u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)) ||
+                 (u.Email != null && u.Email.Equals(username, StringComparison.OrdinalIgnoreCase))) &&
+                u.PasswordHash == password
             );
 
             var response = new UserResponse

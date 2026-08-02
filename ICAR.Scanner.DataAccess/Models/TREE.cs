@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ICAR.Scanner.DataAccess.Models;
@@ -30,6 +30,8 @@ public partial class Tree
     public string? AssetSubType { get; set; }
 
     public string? SensorType { get; set; }
+
+    public Guid? SensorTypeId { get; set; }
 
     public string? OperatorId { get; set; }
 
