@@ -16,10 +16,10 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
     {
         var users = await _userRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<User>>(users);
+        return _mapper.Map<IEnumerable<UserDTO>>(users.Where(u => u.IsActive != false).OrderByDescending(u => u.CreatedOn));
     }
 
     public async Task<UserDTO?> GetUserByIdAsync(Guid userId)
@@ -32,8 +32,10 @@ public class UserService : IUserService
     {
         var user = _mapper.Map<User>(userCreateDto);
         user.Id = Guid.NewGuid();
-        user.PasswordHash = userCreateDto.Password;// HashPassword(userCreateDto.Password);
+        user.PasswordHash = userCreateDto.Password; // TODO: hash before storing
         user.CreatedOn = DateTime.UtcNow;
+        if (string.IsNullOrWhiteSpace(user.Username))
+            user.Username = string.Concat(userCreateDto.FirstName, userCreateDto.LastName);
         await _userRepository.AddAsync(user);
 
         return _mapper.Map<UserDTO>(user);
@@ -44,13 +46,20 @@ public class UserService : IUserService
         var user = await _userRepository.GetByIdAsync(userDto.Id);
         if (user == null) return false;
 
-        user.FirstName = userDto.FirstName;
-        user.LastName = userDto.LastName;
-        user.Email = userDto.Email;
-        user.PhoneNumber = userDto.PhoneNumber;
-        user.Address = userDto.Address;
-        user.RoleID = userDto.RoleId;
-        user.IsActive = userDto.IsActive;
+        if (userDto.FirstName != null)         user.FirstName          = userDto.FirstName;
+        if (userDto.LastName != null)          user.LastName           = userDto.LastName;
+        if (userDto.Email != null)             user.Email              = userDto.Email;
+        if (userDto.PhoneNumber != null)       user.PhoneNumber        = userDto.PhoneNumber;
+        if (userDto.Address != null)           user.Address            = userDto.Address;
+        if (userDto.RoleId.HasValue)           user.RoleID             = userDto.RoleId;
+        if (userDto.IsActive.HasValue)         user.IsActive           = userDto.IsActive;
+        if (userDto.Username != null)          user.Username           = userDto.Username;
+        if (userDto.ProfilePictureUrl != null) user.ProfilePictureUrl  = userDto.ProfilePictureUrl;
+        if (userDto.Latitude != null)          user.Latitude           = userDto.Latitude;
+        if (userDto.Longitude != null)         user.Longitude          = userDto.Longitude;
+        if (userDto.State != null)             user.State              = userDto.State;
+        if (!string.IsNullOrWhiteSpace(userDto.Password))
+            user.PasswordHash = userDto.Password; // TODO: hash before storing
         user.UpdatedOn = DateTime.UtcNow;
 
         await _userRepository.UpdateAsync(user);

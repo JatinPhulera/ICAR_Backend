@@ -18,10 +18,10 @@ public class TREESService : ITREESService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Tree>> GetAllTreeAsync()
+    public async Task<IEnumerable<TreesDto>> GetAllTreeAsync()
     {
         var trees = await _treeRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<Tree>>(trees.Where(t => t.IsActive != false).OrderByDescending(t => t.CreatedOn));
+        return _mapper.Map<IEnumerable<TreesDto>>(trees.Where(t => t.IsActive != false).OrderByDescending(t => t.CreatedOn));
     }
 
     public async Task<TreesDto?> GetTreeByIdAsync(Guid TreeId)

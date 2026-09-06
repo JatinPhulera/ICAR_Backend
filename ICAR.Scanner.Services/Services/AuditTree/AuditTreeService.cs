@@ -46,6 +46,19 @@ public class AuditTreeService : IAuditTreeService
             var AuditTree = await _AuditTreeRepository.GetByIdAsync(AuditTreeDto.Id);
             if (AuditTree == null) return false;
 
+            if (AuditTreeDto.Name != null)       AuditTree.Name       = AuditTreeDto.Name;
+            if (AuditTreeDto.Girth != null)      AuditTree.Girth      = AuditTreeDto.Girth;
+            if (AuditTreeDto.Height != null)     AuditTree.Height     = AuditTreeDto.Height;
+            if (AuditTreeDto.Remarks != null)    AuditTree.Remarks    = AuditTreeDto.Remarks;
+            if (AuditTreeDto.State != null)      AuditTree.State      = AuditTreeDto.State;
+            if (AuditTreeDto.Level != null)      AuditTree.Level      = AuditTreeDto.Level;
+            if (AuditTreeDto.ReviewedBy != null) AuditTree.ReviewedBy = AuditTreeDto.ReviewedBy;
+            if (AuditTreeDto.AddedBy != null)    AuditTree.AddedBy    = AuditTreeDto.AddedBy;
+            if (AuditTreeDto.UpdatedBy != null)  AuditTree.UpdatedBy  = AuditTreeDto.UpdatedBy;
+            // Disease/Pest/PhysicalDamage are set unconditionally — null = user cleared the toggle
+            AuditTree.Disease        = AuditTreeDto.Disease;
+            AuditTree.Pest           = AuditTreeDto.Pest;
+            AuditTree.PhysicalDamage = AuditTreeDto.PhysicalDamage;
             AuditTree.UpdatedOn = DateTime.UtcNow;
 
             await _AuditTreeRepository.UpdateAsync(AuditTree);

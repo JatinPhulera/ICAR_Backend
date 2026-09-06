@@ -4,8 +4,7 @@ namespace ICAR.Scanner.Models.DTOs;
 
 public class UserCreateDTO
 {
-    [Required]
-    public string Username => string.Concat(FirstName, LastName);
+    public string? Username { get; set; }
 
     [Required, EmailAddress]
     public string Email { get; set; } = null!;

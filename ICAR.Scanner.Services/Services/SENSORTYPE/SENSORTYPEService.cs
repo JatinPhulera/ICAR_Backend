@@ -16,10 +16,10 @@ public class SENSORTYPEService : ISENSORTYPEService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SENSORTYPE>> GetAllSENSORTYPEsAsync()
+        public async Task<IEnumerable<SENSORTYPEDTO>> GetAllSENSORTYPEsAsync()
         {
             var SENSORTYPEs = await _SENSORTYPERepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<SENSORTYPE>>(SENSORTYPEs);
+            return _mapper.Map<IEnumerable<SENSORTYPEDTO>>(SENSORTYPEs);
         }
 
         public async Task<SENSORTYPEDTO?> GetSENSORTYPEByIdAsync(Guid SENSORTYPEId)
@@ -31,10 +31,8 @@ public class SENSORTYPEService : ISENSORTYPEService
         public async Task<SENSORTYPEDTO> CreateSENSORTYPEAsync(SENSORTYPECreateDTO SENSORTYPECreateDto)
         {
             var SENSORTYPE = _mapper.Map<SENSORTYPE>(SENSORTYPECreateDto);
-            //SENSORTYPE.SENSORTYPEId = Guid.NewGuid();
-            //SENSORTYPE.PasswordHash = HashPassword(SENSORTYPECreateDto.Password);
-            //SENSORTYPE.CreatedOn = DateTime.UtcNow;
-            //SENSORTYPE.IsActive = true;
+            SENSORTYPE.SENSORTYPEID = Guid.NewGuid();
+            SENSORTYPE.CreatedOn = DateTime.UtcNow;
 
             await _SENSORTYPERepository.AddAsync(SENSORTYPE);
 
