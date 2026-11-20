@@ -26,12 +26,27 @@ namespace ICAR.Scanner.WebApi.Controllers
         [HttpGet("custom")]
         public async Task<ActionResult<IEnumerable<SensorDTO>>> GetAllSensorCustom()
         {
-            var sessors = await _sensorService.GetUnassignedActiveSensorsAsync();
+            // Full list, wrapped in the {status, data} shape — used by the admin
+            // Sensor Management screen, which must show assigned/inactive sensors too.
+            var sensors = await _sensorService.GetAllSensorsAsync();
+            return Ok(ToSensorResponse(sensors));
+        }
 
-            var response = new SensorResponse
+        [HttpGet("available")]
+        public async Task<ActionResult<IEnumerable<SensorDTO>>> GetAvailableSensors()
+        {
+            // Unassigned + active only — used by the tree-assignment picker so
+            // a sensor already in use can't be selected and rejected with a 400.
+            var sensors = await _sensorService.GetUnassignedActiveSensorsAsync();
+            return Ok(ToSensorResponse(sensors));
+        }
+
+        private static SensorResponse ToSensorResponse(IEnumerable<SensorDTO>? sensors)
+        {
+            return new SensorResponse
             {
-                Status = sessors != null && sessors.Any() ? "Success" : "NoData",
-                Data = sessors?.Select(dto => new SensorDTO
+                Status = sensors != null && sensors.Any() ? "Success" : "NoData",
+                Data = sensors?.Select(dto => new SensorDTO
                 {
                     Id = dto.Id,
                     Status = dto.Status,
@@ -49,9 +64,6 @@ namespace ICAR.Scanner.WebApi.Controllers
                     IsAssigned = dto.IsAssigned,
                 }).ToList() ?? new List<SensorDTO>()
             };
-
-            return Ok(response);
-
         }
 
         [HttpGet("{id}")]

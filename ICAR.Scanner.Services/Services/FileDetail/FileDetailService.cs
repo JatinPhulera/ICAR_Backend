@@ -31,8 +31,7 @@ public class FileDetailService : IFileDetailService
         public async Task<FileDetailDTO> CreateFileDetailAsync(FileDetailCreateDTO FileDetailCreateDto)
         {
             var FileDetail = _mapper.Map<FileDetail>(FileDetailCreateDto);
-           // FileDetail.FileDetailId = Guid.NewGuid();
-            //FileDetail.PasswordHash = HashPassword(FileDetailCreateDto.Password);
+            FileDetail.Id = Guid.NewGuid();
             FileDetail.CreatedOn = DateTime.UtcNow;
             FileDetail.IsActive = true;
 

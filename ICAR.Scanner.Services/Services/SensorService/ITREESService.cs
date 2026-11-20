@@ -9,7 +9,7 @@ namespace ICAR.Scanner.Services.Services.TreeService;
         Task<TreesDto?> GetTreeByIdAsync(Guid TreeId);
         Task<TreesDto?> GetTreeByRfidAsync(string rfid);
         Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto);
-        Task<bool> UpdateTreeAsync(TreesDto treeDto);
+        Task<bool> UpdateTreeAsync(TreesDto treeDto, IReadOnlySet<string>? providedKeys = null);
         Task<bool> DeleteTreeAsync(Guid TreeId);
     }
 

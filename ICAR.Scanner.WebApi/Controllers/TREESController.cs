@@ -5,6 +5,7 @@ using ICAR.Scanner.Services.Services.UserService;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.AccessControl;
+using System.Text.Json;
 
 namespace ICAR.Scanner.WebApi.Controllers
 {
@@ -55,6 +56,7 @@ namespace ICAR.Scanner.WebApi.Controllers
                     Longitude = dto.Longitude,
                     PlantationYear = dto.PlantationYear,
                     SensorType = dto.SensorType,
+                    SensorTypeId = dto.SensorTypeId,
                     OperatorId = dto.OperatorId,
                     InstallationDate = dto.InstallationDate,
                     OperatorFirstName = !string.IsNullOrEmpty(dto.OperatorId) && Guid.TryParse(dto.OperatorId, out var opId) ? users.FirstOrDefault(u => u.Id == opId) is { } user ? $"{user.FirstName}".Trim() : null : null,
@@ -178,12 +180,21 @@ namespace ICAR.Scanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTree(Guid id, TreesDto treeDto)
+        public async Task<IActionResult> UpdateTree(Guid id, [FromBody] JsonElement body)
         {
-            if (id != treeDto.Id) return BadRequest();
+            // Bind the raw JSON alongside the typed DTO so the service can tell "field
+            // omitted" from "field explicitly set to null" — see MappingProfile for why
+            // that distinction matters for partial updates.
+            var treeDto = body.Deserialize<TreesDto>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (treeDto == null || id != treeDto.Id) return BadRequest();
+
+            var providedKeys = body.ValueKind == JsonValueKind.Object
+                ? new HashSet<string>(body.EnumerateObject().Select(p => p.Name), StringComparer.OrdinalIgnoreCase)
+                : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
             try
             {
-                var result = await _treeService.UpdateTreeAsync(treeDto);
+                var result = await _treeService.UpdateTreeAsync(treeDto, providedKeys);
                 return result ? NoContent() : NotFound();
             }
             catch (InvalidOperationException ex)

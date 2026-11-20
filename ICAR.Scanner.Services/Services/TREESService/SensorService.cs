@@ -29,10 +29,10 @@ public class SensorService : ISensorService
             return _mapper.Map<IEnumerable<SensorDTO>>(sensors.Where(s => s.IsActive == true).OrderByDescending(s => s.CreatedOn));
         }
 
-        public async Task<IEnumerable<SENSOR>> GetUnassignedActiveSensorsAsync()
+        public async Task<IEnumerable<SensorDTO>> GetUnassignedActiveSensorsAsync()
         {
             var sensors = await _sensorRepository.GetAllAsync();
-            return sensors.Where(s => s.IsActive == true && !s.IsAssigned).OrderByDescending(s => s.CreatedOn);
+            return _mapper.Map<IEnumerable<SensorDTO>>(sensors.Where(s => s.IsActive == true && !s.IsAssigned).OrderByDescending(s => s.CreatedOn));
         }
 
         public async Task<SensorDTO?> GetSensorByIdAsync(Guid sensorID)

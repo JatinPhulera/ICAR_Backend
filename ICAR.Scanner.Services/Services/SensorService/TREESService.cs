@@ -9,12 +9,21 @@ public class TREESService : ITREESService
 {
     private readonly IRepository<Tree> _treeRepository;
     private readonly IRepository<SENSOR> _sensorRepository;
+    private readonly IRepository<AuditTree> _auditTreeRepository;
+    private readonly IRepository<FileDetail> _fileDetailRepository;
     private readonly IMapper _mapper;
 
-    public TREESService(IRepository<Tree> treeRepository, IRepository<SENSOR> sensorRepository, IMapper mapper)
+    public TREESService(
+        IRepository<Tree> treeRepository,
+        IRepository<SENSOR> sensorRepository,
+        IRepository<AuditTree> auditTreeRepository,
+        IRepository<FileDetail> fileDetailRepository,
+        IMapper mapper)
     {
         _treeRepository = treeRepository;
         _sensorRepository = sensorRepository;
+        _auditTreeRepository = auditTreeRepository;
+        _fileDetailRepository = fileDetailRepository;
         _mapper = mapper;
     }
 
@@ -48,9 +57,13 @@ public class TREESService : ITREESService
 
     public async Task<TreesDto> CreateTreeAsync(TREESCreateDTO treeCreateDto)
     {
+        // Validate the sensor (no writes yet) before touching the tree — writing the
+        // "assigned" flag here and then failing to save the tree would orphan the sensor
+        // as permanently assigned with no tree, blocking it from ever being used again.
+        SENSOR? sensorToAssign = null;
         if (treeCreateDto.SensorId.HasValue)
         {
-            await AssignSensorAsync(treeCreateDto.SensorId.Value);
+            sensorToAssign = await ValidateSensorForAssignmentAsync(treeCreateDto.SensorId.Value);
         }
 
         var tree = _mapper.Map<Tree>(treeCreateDto);
@@ -64,22 +77,57 @@ public class TREESService : ITREESService
 
         await _treeRepository.AddAsync(tree);
 
+        if (sensorToAssign != null)
+        {
+            sensorToAssign.IsAssigned = true;
+            sensorToAssign.UpdatedOn = DateTime.UtcNow;
+            await _sensorRepository.UpdateAsync(sensorToAssign);
+        }
+
         return _mapper.Map<TreesDto>(tree);
     }
 
-    public async Task<bool> UpdateTreeAsync(TreesDto treeDto)
+    public async Task<bool> UpdateTreeAsync(TreesDto treeDto, IReadOnlySet<string>? providedKeys = null)
     {
         var tree = await _treeRepository.GetByIdAsync(treeDto.Id);
         if (tree == null) return false;
 
-        var previousSensorId = tree.SENSORID;
-        var newSensorId = treeDto.SENSORID;
+        // providedKeys (from the raw request JSON) tells us which fields the client
+        // actually sent vs. which are just C# defaults for keys it never included.
+        // Without it (e.g. an internal caller), assume everything was provided —
+        // matches the old full-overwrite behavior for anyone not passing it.
+        bool sensorIdProvided = providedKeys == null || providedKeys.Contains(nameof(Tree.SENSORID));
 
-        if (newSensorId != previousSensorId)
+        var previousSensorId = tree.SENSORID;
+        var newSensorId = sensorIdProvided ? treeDto.SENSORID : previousSensorId;
+        var sensorChanged = sensorIdProvided && newSensorId != previousSensorId;
+
+        // Validate the new sensor (no writes yet) before saving the tree — see CreateTreeAsync
+        // for why writing the "assigned" flag before the tree save is committed is unsafe.
+        SENSOR? sensorToAssign = null;
+        if (sensorChanged && newSensorId.HasValue)
         {
-            if (newSensorId.HasValue)
+            sensorToAssign = await ValidateSensorForAssignmentAsync(newSensorId.Value);
+        }
+
+        treeDto.CreatedOn = tree.CreatedOn;
+        treeDto.CreatedBy = tree.CreatedBy;
+        _mapper.Map(treeDto, tree, opts => opts.Items["ProvidedKeys"] = providedKeys);
+        if (sensorIdProvided)
+        {
+            tree.SENSORID = newSensorId;
+        }
+        tree.IsActive = treeDto.IsActive ?? true;
+        tree.UpdatedOn = DateTime.UtcNow;
+        await _treeRepository.UpdateAsync(tree);
+
+        if (sensorChanged)
+        {
+            if (sensorToAssign != null)
             {
-                await AssignSensorAsync(newSensorId.Value);
+                sensorToAssign.IsAssigned = true;
+                sensorToAssign.UpdatedOn = DateTime.UtcNow;
+                await _sensorRepository.UpdateAsync(sensorToAssign);
             }
 
             if (previousSensorId.HasValue && previousSensorId != newSensorId)
@@ -88,16 +136,6 @@ public class TREESService : ITREESService
             }
         }
 
-        treeDto.CreatedOn = tree.CreatedOn;
-        treeDto.CreatedBy = tree.CreatedBy;
-        if (!treeDto.SensorTypeId.HasValue && tree.SensorTypeId.HasValue)
-        {
-            treeDto.SensorTypeId = tree.SensorTypeId;
-        }
-        _mapper.Map(treeDto, tree);
-        tree.IsActive = treeDto.IsActive ?? true;
-        tree.UpdatedOn = DateTime.UtcNow;
-        await _treeRepository.UpdateAsync(tree);
         return true;
     }
 
@@ -105,6 +143,20 @@ public class TREESService : ITREESService
     {
         var tree = await _treeRepository.GetByIdAsync(TreeId);
         if (tree == null) return false;
+
+        // Remove dependent audit/file rows first — their FK to Tree is required (non-nullable),
+        // so leaving them in place makes the delete below fail with a FK constraint violation.
+        var audits = await _auditTreeRepository.GetAllAsync();
+        foreach (var audit in audits.Where(a => a.TreeId == TreeId).ToList())
+        {
+            await _auditTreeRepository.DeleteAsync(audit);
+        }
+
+        var docs = await _fileDetailRepository.GetAllAsync();
+        foreach (var doc in docs.Where(d => d.TreeId == TreeId).ToList())
+        {
+            await _fileDetailRepository.DeleteAsync(doc);
+        }
 
         if (tree.SENSORID.HasValue)
         {
@@ -115,7 +167,8 @@ public class TREESService : ITREESService
         return true;
     }
 
-    private async Task AssignSensorAsync(Guid sensorId)
+    /// <summary>Validates a sensor is eligible for assignment without writing anything.</summary>
+    private async Task<SENSOR> ValidateSensorForAssignmentAsync(Guid sensorId)
     {
         var sensor = await _sensorRepository.GetByIdAsync(sensorId)
             ?? throw new InvalidOperationException("Sensor not found.");
@@ -130,9 +183,7 @@ public class TREESService : ITREESService
             throw new InvalidOperationException("Sensor is not active.");
         }
 
-        sensor.IsAssigned = true;
-        sensor.UpdatedOn = DateTime.UtcNow;
-        await _sensorRepository.UpdateAsync(sensor);
+        return sensor;
     }
 
     private async Task UnassignSensorAsync(Guid sensorId)
